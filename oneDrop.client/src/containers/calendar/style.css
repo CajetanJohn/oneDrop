@@ -1,0 +1,79 @@
+/* Add these styles to your CSS stylesheet */
+
+/* Add these styles to your CSS stylesheet */
+
+.month {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .weekday,
+  .day-cell {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  .current-day {
+    background-color: #e0e0e0; /* You can customize the background color for the current day */
+  }
+  
+  .day p {
+    margin: 0;
+  }
+  
+  .event {
+    cursor: pointer;
+    margin-top: 4px;
+    padding: 4px;
+    border: 1px solid #ddd;
+  }
+  
+  .event img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+
+
+.event-date {
+    background-color: #4caf50; /* Green color for the event date */
+    color: #fff; /* Text color for the event date */
+    border-radius: 50%; /* Optional: Adds rounded corners for a circular appearance */
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .event-date:hover {
+    background-color: #45a049; /* Darker green color on hover */
+  }
+  
+  /* month.css */
+
+.month {
+  width: 100%;
+  height: 100vh;
+  border-collapse: collapse;
+}
+
+.week {
+  height: 14.2857%; /* 100% / 7 days */
+}
+
+.day-cell {
+  box-sizing: border-box;
+  width: 14.2857%; /* 100% / 7 days */
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  /* Adjust styles for smaller screens if needed */
+  .month {
+    font-size: 14px; /* Example adjustment */
+  }
+
+  /* Add more responsive styles as needed */
+}
