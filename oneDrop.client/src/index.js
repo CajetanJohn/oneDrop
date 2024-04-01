@@ -11,7 +11,8 @@ import EventList from './containers/eventList.js';
 import './assets/style/style.css';
 import './assets/style/globals.css';
 import './assets/style/registration.css'
-
+import ListItem from './components/features/listItem.js';
+import RequestSongsList from './components/features/requestSongsList.js';
 
 const NavigateToApp = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const RootApp = () => {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/app/*" element={<SignUp/>}/>
+          <Route path="/app/*" element={<RequestSongsList/>}/>
           <Route path="/listing" element={<EventList />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/" element={<NavigateToApp />} />

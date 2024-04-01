@@ -32,21 +32,13 @@ select:-webkit-autofill:focus {
 }
 
 
-
-body, html{
-    padding: 0;
-    margin: 0;
-    font-size: 20px;
-    font-family: 'Ubuntu';
-}
-
-
 :root{
     --p-bg1:#F3EFE6;
     --p-bg2:#FFFFFF;
 
 
     --txtc:#23262B;
+    --txt-opp:#F3EFE6;
     --less-t-c:#3a3a3a;
     --a-txtc:#51A952;
     --a-hover-c:#23262B;
@@ -60,6 +52,9 @@ body, html{
     --btn-bg:#F1F1F1;
     --btn-border:black;
     --btn-border-radius: 10px;
+
+    --shadow:rgba(35, 38, 43, 0.2);
+    --blend:rgba(243, 239, 230, .5);
 
 
     --20:0;
@@ -76,6 +71,11 @@ body, html{
 
         --txtc:#F3EFE6;
         --a-txtc:#51A952;
+        --txt-opp:#23262B;
+
+        --shadow:rgba(243, 239, 230, .2);
+        --blend:rgba(35, 38, 43, .5);
+
 
         --btn-bg:#23262B;
         --btn-border:#F3EFE6;
@@ -84,28 +84,11 @@ body, html{
     }
   }
 
-/*
-:root{
-    --p-bg1:#23262B;
-    --p-bg3:;
-    --s-bg1:;
-    --s-bg2:;
-    --s-bg3:;
 
-    --txtc:#F1F1F1;
-    --hover-txtc:;
-    --input-txtc:#23262B;
-    --error-txtc:;
-    --less-t-c:#3a3a3a;
-    --a-txtc:#51A952;
-    --a-hover-c:;
-    --important-txtc:black;
-    --highlighted-txtc:;
-    --placeholder-txtc:#23262B;
-    --input-cursor-c:#23262B;
-    --invalid-txtc:red;
-    --border-c:#23262B;
-    --invalid-border-c:red;
-    --notification-c:#23262B;
+  body, html{
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+    font-family: 'Ubuntu';
+    background: var(--p-bg1);
 }
-*/
