@@ -22,6 +22,8 @@ import { ReactComponent as GraphUp } from './graph-up-arrow.svg';
 import { ReactComponent as Money } from './cash-coin.svg';
 import { ReactComponent as Sort_Des } from './sort-numeric-down-alt.svg';
 import { ReactComponent as Sort_Asc } from './sort-numeric-down.svg';
+import { ReactComponent as Close } from './x.svg';
+
 
 const icons = {
   calendar: CalendarIcon,
@@ -44,6 +46,7 @@ const icons = {
   money: Money,
   ascending:Sort_Asc,
   descending:Sort_Des,
+  close:Close,
 };
 
 const Icon = ({ name, onClick, fill, size, children, ...rest }) => {

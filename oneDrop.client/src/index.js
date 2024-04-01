@@ -12,6 +12,7 @@ import './assets/style/style.css';
 import './assets/style/globals.css';
 import './assets/style/registration.css'
 import ListItem from './components/features/listItem.js';
+import Request from './components/features/request.js';
 import RequestSongsList from './components/features/requestSongsList.js';
 
 const NavigateToApp = () => {
@@ -33,7 +34,7 @@ const RootApp = () => {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/app/*" element={<RequestSongsList/>}/>
+          <Route path="/app/*" element={<Request/>}/>
           <Route path="/listing" element={<EventList />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/" element={<NavigateToApp />} />

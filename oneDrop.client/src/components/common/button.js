@@ -27,7 +27,7 @@ export const LoadingButton = ({ text, error, loading, disabled, onClick }) => {
   const [errorMessage, setErrorMessage] = useState(error);
 
   useEffect(() => {
-    setIsError(error !== '');
+    setIsError(error !== '' || false);
     setErrorMessage(error);
   }, [error]);
 
