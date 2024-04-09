@@ -1,47 +1,43 @@
-import React, { useState } from 'react';
+//
+import React, { useState, useRef, useEffect } from 'react';
 import Input from '../common/input';
 import { LoadingButton } from '../common/button';
 import Icon from '../../assets/icons/icons';
 import MakeRequest from '../../utils/services/apis/makeRequest';
-
-const sampleData = [
-  "Nyashinski - Too Much",
-  "Eminem - Lose Yourself",
-  "Linkin Park - Numb",
-  "Coldplay - Fix You",
-  "Queen - Bohemian Rhapsody",
-  "Drake - God's Plan",
-  "Ed Sheeran - Shape of You",
-  "Adele - Someone Like You",
-  "Imagine Dragons - Believer",
-  "Taylor Swift - Shake It Off",
-  "Maroon 5 - Sugar",
-  "Justin Bieber - Love Yourself",
-  "Katy Perry - Roar",
-  "Bruno Mars - Just the Way You Are",
-  "Michael Jackson - Thriller",
-  "The Beatles - Hey Jude",
-  "Nirvana - Smells Like Teen Spirit",
-  "Bob Dylan - Like a Rolling Stone",
-  "Led Zeppelin - Stairway to Heaven",
-  "U2 - With or Without You"
-];
-
+import { searchSong } from '../../utils/services/apis/searchMusic';
+import TextArea from '../common/textarea';
+import Loading from '../common/loading';
+import AudioPlayer from './audioPlayer';
+import ButtonModal from './bottomModal';
 
 const Request = () => {
-  const [song, setSeachSong] = useState('');
+  const [song, setSearchSong] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [selectedResult, setSelectedResult] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [feedBack, setFeedBack] = useState('');
+  const [fetching, setFetching] = useState(false);
+  const searchResultsRef = useRef(null);
 
-  const handleFetchData = (query) => {
-    setLoading(true)
-    const filteredResults = sampleData.filter((result) =>
-      result.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(filteredResults);
+  const handleFetchData = async (query) => {
+    if (query === '') {
+      setError('Input cannot be empty')
+      return null;
+    }
+    setFetching(true);
+    
+    try {
+      const result = await searchSong(query);
+      setFetching(false);
+      setSearchResults(result);
+      setError('')
+    } catch (error) {
+      setFetching(false);
+      setError(error);
+    }
   };
 
   const handleResultClick = (result) => {
@@ -54,24 +50,57 @@ const Request = () => {
     setIsOpen(true);
   };
 
-  const handleRequest = () => {
+  const handleRequest = async () => {
     setLoading(true)
-    const formData=selectedResult; 
-    MakeRequest(formData);
-    setTimeout(() => {
-      setLoading(false)      
-    }, 1000);
+    const formData = {
+      song: {
+        name: `${selectedResult.artist.name} - ${selectedResult.title}`,
+        image: selectedResult.artist.picture,
+        paid: 100,
+        message: message,
+        requestClient: 'cajetan John',
+      }
+    }; 
+
+    try {
+      const result = await MakeRequest(formData);
+      setLoading(false);
+      setFeedBack(result.message);
+      setError('')
+    } catch (error) {
+      setLoading(false);
+      setError(error.message)
+    }
   };
 
+
+  const handleScroll = () => {
+    console.log('searchResultsElement');
+    setIsOpen(false);
+  };
+
+  
+
   return (
-    <div>
-      <div className="search-results">
-        {searchResults.map((result, index) => (
-          <div key={index} className="result" onClick={() => handleResultClick(result)}>
-            {result}
+    <div className='request-container'> 
+      {fetching ? (
+        <div className='dialog-page'><Loading loading={fetching} /></div>          
+      ) : (
+        searchResults.length > 0 ? (
+          <div className='results-display' onScroll={handleScroll}>
+            <ul className="search-results" ref={searchResultsRef} >
+              {searchResults.map((song) => (
+                <li className='result' key={song.id} onClick={() => handleResultClick(song)}>
+                  {song.title} - {song.artist.name}
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
-      </div>
+          
+        ) : (
+          <div className='dialog-page'> search music to request</div>
+        )
+      )}
 
       {isOpen ? (
         <div className={`search-input-container ${isOpen ? 'open' : ''}`}>
@@ -82,29 +111,58 @@ const Request = () => {
             labelText="Search Music" 
             required={true} 
             value={song} 
-            onChange={(name, value) => setSeachSong(value)} 
+            onChange={(name, value) => setSearchSong(value)} 
             error={''}
           />
-          <div className='fetch-btn' onClick={() => handleFetchData(song)}>{loading ? (<LoadingButton loading={loading} error={error} text={''} onClick={()=>{return null}}/>): (<Icon name='search' size='30px'/>)}</div>
+          <div className='fetch-btn' onClick={() => handleFetchData(song)}>
+          <Icon name='search' size='30px'/>
+          </div>
         </div>
       ) : (
-        <div className='search-btn' onClick={() => setIsOpen(true)}><Icon name='search' size='30px'/></div>
+        <div className='search-btn' onClick={() => setIsOpen(true)}>
+          <Icon name='search' size='30px'/>
+        </div>
       )}
 
-      {selectedResult && (
-        <div className={`result-details ${selectedResult ? 'slide-in' : 'slide-out'}`}>
-          <Icon onClick={handleCloseDetails} name='close' size='30px'/>
+{selectedResult && (
+  <ButtonModal className='result-details' style={{ backgroundImage: `url(${selectedResult.artist.picture})` }}  isOpen={isOpen}>
+    <Icon onClick={handleCloseDetails} name='close' size='30px' />
           <div className="details">
-            <div>{selectedResult}</div>
+            <div>{selectedResult.artist.name} - {selectedResult.title}</div>
+            <div className='player'> <AudioPlayer url={selectedResult.preview} image={selectedResult.artist.picture}/> </div>
           </div>
-          <LoadingButton onClick={handleRequest} text ={'Request'} error={error} loading={loading} disabled={false} />
-      </div>
+          
+          <TextArea type='text' 
+            id="message" 
+            name="message" 
+            labelText="What message would you like to pass out?"
+            value={message} 
+            onChange={(value) => setMessage(value)} 
+            error={''}/>
+          <LoadingButton feedBack={feedBack} onClick={handleRequest} text={'Request'} error={error} loading={loading} disabled={false} />
+  </ButtonModal>
       )}
 
-        
-      
-
-      <style jsx>{`
+<style jsx>{`
+.results-display{
+  position:relative;
+  max-height:100vh;
+  height:100vh;
+  width:100%;
+  overflow-y:auto;
+}
+      .player{
+        width:60px !important;
+        height:60px !important;
+        cursor:pointer;
+      }
+      .dialog-page{
+        display:grid;
+        place-items:center;
+        width:100%;
+        height:100vh;
+        color:var(--txtc);
+      }
         .search-input-container {
           width: 0;
           transition: width 0.5s ease;
@@ -119,8 +177,7 @@ const Request = () => {
         }
         .fetch-btn {
           position: absolute;
-          right: 0;
-          background:red;
+          right: 10px;
         }
         .search-input-container.open {
           width: calc(100% - 20px);
@@ -138,62 +195,49 @@ const Request = () => {
           place-items: center;
           bottom: 30px;
           right: 30px;
-          border:2px solid var(--txtc);
+          border:2px solid var(--txtc)
+          
         }
         .search-results {
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
-          min-height: 100%;
+          height:fit-content;
+          list-style:none;
+          padding:0;
+          margin:0;
         }
+        
         .result {
           cursor: pointer;
           padding: 5px;
           margin: 10px;
           border-bottom:2px dashed var(--txtc);
+          color:var(--txtc);
         }
         .result-details {
           position: fixed;
           bottom: 0;
           left: 0;
           right: 0;
-          background-color: white;
+          background-color: var(--txt-opp);
           padding: 10px;
           border-top: 1px solid #ccc;
           animation-duration: 0.5s;
           animation-timing-function: ease;
           height:fit-content;
+          color:var(--txtc);
+          background-size:cover;
+          background-blend-mode:overlay;
+          background-repeat:no-repeat;
         }
         .details {
           margin-bottom: 10px;
-        }
-        button {
-          margin-right: 10px;
-        }
-        .slide-in {
-          animation-name: slideIn;
-        }
-        .slide-out {
-          animation-name: slideOut;
-        }
-
-        @keyframes slideIn {
-          from {
-            transform: translateY(100%);
-          }
-          to {
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideOut {
-          from {
-            transform: translateY(0);
-          }
-          to {
-            transform: translateY(100%);
-          }
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          max-width:100%;
         }
       `}</style>
     </div>
@@ -201,3 +245,9 @@ const Request = () => {
 };
 
 export default Request;
+
+
+
+
+
+

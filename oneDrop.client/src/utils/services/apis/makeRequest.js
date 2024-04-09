@@ -6,7 +6,8 @@ async function MakeRequest(data) {
         setTimeout(() => {
             console.log(data);
             // Simulate successful API call by resolving the Promise with some data
-            resolve({ message: 'Signup successful', data });
+            //resolve({ message: 'Signup successful', data });
+            reject({ message: 'there is an error' });
         }, 10000); // Timeout of 10 seconds (10000 milliseconds)
     });
 }

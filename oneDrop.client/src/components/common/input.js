@@ -54,8 +54,8 @@ class Input extends React.Component {
             onChange={this.handleInputChange}
           />
           {type === 'password' && (showPassword ?
-            (<div className='icon'><Icon name="hide" onClick={this.togglePasswordVisibility} style={{ position: 'absolute', top: '50%', right: '0', transform: 'translate(100%, -50%)' }} /></div>)
-            : (<div className='icon'><Icon name="show" onClick={this.togglePasswordVisibility} style={{ position: 'absolute', top: '50%', right: '0', transform: 'translate(100%, -50%)' }}/></div>)
+            (<div className='icon-container'><Icon name="hide" onClick={this.togglePasswordVisibility} style={{ position: 'absolute', top: '50%', right: '0', transform: 'translate(100%, -50%)' }} /></div>)
+            : (<div className='icon-container'><Icon name="show" onClick={this.togglePasswordVisibility} style={{ position: 'absolute', top: '50%', right: '0', transform: 'translate(100%, -50%)' }}/></div>)
           )}
           <label htmlFor={id}>{labelText}</label>
           <style>
@@ -127,7 +127,7 @@ class Input extends React.Component {
             .input:focus.invalid ~ label {
               color: var(--invalid-txtc);
             }
-            .icon{
+            .icon-container{
               position:absolute;
               bottom:50%;
               right: 30px;
@@ -139,6 +139,9 @@ class Input extends React.Component {
             .error{
               color: var(--invalid-txtc);
               font-size:0.6rem;
+            }
+            .feedBack{
+              color:var()
             }
           `}
         </style>

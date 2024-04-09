@@ -13,8 +13,8 @@ export const searchSong = async (query) => {
 
   try {
     const response = await axios(options);
-    return response.data;
+    return response.data.data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };

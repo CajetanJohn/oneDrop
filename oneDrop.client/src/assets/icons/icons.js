@@ -23,6 +23,8 @@ import { ReactComponent as Money } from './cash-coin.svg';
 import { ReactComponent as Sort_Des } from './sort-numeric-down-alt.svg';
 import { ReactComponent as Sort_Asc } from './sort-numeric-down.svg';
 import { ReactComponent as Close } from './x.svg';
+import { ReactComponent as Play } from './play.svg';
+import { ReactComponent as Pause } from './pause-fill.svg';
 
 
 const icons = {
@@ -47,6 +49,8 @@ const icons = {
   ascending:Sort_Asc,
   descending:Sort_Des,
   close:Close,
+  play:Play,
+  pause:Pause,
 };
 
 const Icon = ({ name, onClick, fill, size, children, ...rest }) => {
@@ -63,31 +67,34 @@ const Icon = ({ name, onClick, fill, size, children, ...rest }) => {
     }
   };
 
-  const iconStyle = {
+  const containerStyle = {
+    position: 'relative', 
+    display: 'flex',
+    alignItems: 'center', // Center vertically
+    justifyContent: 'center', // Center horizontally
     width: size || '22px',
     height: size || '22px',
+  };
+
+  const iconStyle = {
+    width: '100%',
+    height: '100%',
     fill: fill || 'var(--txtc)',
-    filter: children ? 'blur(.4px)' : 'none', // Apply blur effect only when children are present
-  };
+    filter: children ? 'blur(.4px)' : 'none',
 
-  const containerStyle = {
-    position: 'relative', // Set position relative for absolute positioning of children
-    display: 'inline-block',
-    fontSize: size || '0.6rem',
-    color: 'var(--txtc)',
-    fontWeight:'700',
   };
-
+  
   const childrenStyle = {
     position: 'absolute',
     top: '0',
     left: '0',
-    width: size || '22px', // Set width and height to match icon
-    height: size || '22px',
+    width: '100%',
+    height: '100%',
     display: 'grid',
     placeItems: 'center',
-    fontSize:".6rem",
+    fontSize: '.6rem',
   };
+  
 
   return (
     <div style={containerStyle}>
