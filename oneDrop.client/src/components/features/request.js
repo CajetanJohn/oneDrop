@@ -104,16 +104,7 @@ const Request = () => {
 
       {isOpen ? (
         <div className={`search-input-container ${isOpen ? 'open' : ''}`}>
-          <Input 
-            type='text' 
-            id="searchsong" 
-            name="searchsong" 
-            labelText="Search Music" 
-            required={true} 
-            value={song} 
-            onChange={(name, value) => setSearchSong(value)} 
-            error={''}
-          />
+          <Input type='text' id="searchsong" name="searchsong" labelText="Search Music" required={true} value={song} onChange={(name, value) => setSearchSong(value)} error={''}/>
           <div className='fetch-btn' onClick={() => handleFetchData(song)}>
           <Icon name='search' size='30px'/>
           </div>
@@ -124,9 +115,9 @@ const Request = () => {
         </div>
       )}
 
-{selectedResult && (
-  <ButtonModal className='result-details' style={{ backgroundImage: `url(${selectedResult.artist.picture})` }}  isOpen={isOpen}>
-    <Icon onClick={handleCloseDetails} name='close' size='30px' />
+      {selectedResult && (
+        <ButtonModal className='result-details' style={{ backgroundImage: `url(${selectedResult.artist.picture})` }}  isOpen={isOpen}>
+          <Icon onClick={handleCloseDetails} name='close' size='30px' />
           <div className="details">
             <div>{selectedResult.artist.name} - {selectedResult.title}</div>
             <div className='player'> <AudioPlayer url={selectedResult.preview} image={selectedResult.artist.picture}/> </div>
@@ -136,7 +127,7 @@ const Request = () => {
             id="message" 
             name="message" 
             labelText="What message would you like to pass out?"
-            value={message} 
+            value={''} 
             onChange={(value) => setMessage(value)} 
             error={''}/>
           <LoadingButton feedBack={feedBack} onClick={handleRequest} text={'Request'} error={error} loading={loading} disabled={false} />

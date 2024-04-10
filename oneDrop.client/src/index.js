@@ -14,6 +14,7 @@ import './assets/style/registration.css'
 import ListItem from './components/features/listItem.js';
 import Request from './components/features/request.js';
 import RequestSongsList from './components/features/requestSongsList.js';
+import CreateEventForm from './components/features/createEventForm.js';
 
 const NavigateToApp = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const RootApp = () => {
         <Routes>
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/app/*" element={<Request/>}/>
+          <Route path="/app/*" element={<CreateEventForm/>}/>
           <Route path="/listing" element={<EventList />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/" element={<NavigateToApp />} />
