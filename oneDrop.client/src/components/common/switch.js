@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
-const Switch = ({ filter, isOn, onSwitch }) => {
+const Switch = ({ name, isOn, onSwitch }) => {
   const [isChecked, setIsChecked] = useState(isOn);
 
   useEffect(() => {
-    onSwitch(filter, isChecked);
+    onSwitch(name, isChecked);
   }, [isChecked]);
   
   return (
     <>
       <style>{switchStyles}</style>
         <label className={`switch ${isChecked ? 'checked' : ''}`} onClick={(e) => { e.preventDefault(); setIsChecked(!isChecked); }}>
-        <input type="checkbox" checked={isChecked} />
+        <input type="checkbox" checked={isChecked} id={name} name={name} value={isChecked}/>
         <span className="slider round"></span>
       </label>
     </>

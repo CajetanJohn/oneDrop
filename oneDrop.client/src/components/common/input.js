@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Icon from '../../assets/icons/icons';
 
 class Input extends React.Component {
@@ -80,7 +80,7 @@ class Input extends React.Component {
               pointer-events:none;
               font-size:0.6rem;
             }
-            .input {
+            .input-field .input {
               width: calc(100% - 1rem);
               border: 0;
               outline: 0;
@@ -93,41 +93,41 @@ class Input extends React.Component {
               background-color:none;
               box-shadow:transparent;
             }
-            .input.invalid {
+            .input-field .input.invalid {
               outline: 0;
               color: var(--invalid-txtc);
               border-color: var(--invalid-txtc);
             }
-            .input:focus,
-            .input.valid {
+            .input-field .input:focus,
+            .input-field .input.valid {
               border-color: var(--txtc);
             }
 
-            .input:focus ~ label{
+            .input-field .input:focus ~ label{
               top: -24px;
             }
 
-            .input:focus.valid ~ label,
-            .input:valid ~ label {
+            .input-field .input:focus.valid ~ label,
+            .input-field .input:valid ~ label {
               font-size: 0.7rem;
               top: -24px;
               color: var(--txtc);
             }
 
-            .input.invalid ~ span{
+            .input-field .input.invalid ~ span{
               display:none;
               margin:0;
               line-height:normal;
             }
 
-            .input:focus.invalid ~ span {
+            .input-field .input:focus.invalid ~ span {
               color:var(--invalid-txtc);
               display:block;
             }
-            .input:focus.invalid ~ label {
+            .input-field .input:focus.invalid ~ label {
               color: var(--invalid-txtc);
             }
-            .icon-container{
+            .input-field .icon-container{
               position:absolute;
               bottom:50%;
               right: 30px;
@@ -136,11 +136,11 @@ class Input extends React.Component {
               padding:0 5px;
               transform:translateY(50%);
             }
-            .error{
+            .input-field .error{
               color: var(--invalid-txtc);
               font-size:0.6rem;
             }
-            .feedBack{
+            .input-field .feedBack{
               color:var()
             }
           `}
@@ -153,6 +153,89 @@ class Input extends React.Component {
     );
   }
 }
+
+
+
+export const RangeInput = ({ min, max, value , onChange, steps, labelText, id, name }) => {
+  const [rangeValue, setRangeValue] = useState(value || min || 0);
+
+  const handleChange = (name, newValue=value) => {
+    setRangeValue(newValue);
+    onChange(name, newValue);
+  };
+
+  useEffect(() => {
+    setRangeValue(value)    
+  }, [value])
+  
+
+  return (
+    <div className="range-input-container">
+      <label htmlFor={id}>{labelText} :: {rangeValue}</label>
+      <div>
+        <input type="range" min={min} max={max} name={name} id={id} steps={steps} value={rangeValue} onChange={(name, value)=>{handleChange(name, value)}} className="custom-range-input" />
+        <div className="value-marker" style={{ left: `${((rangeValue - min) / (max - min)) * 100}%` }}>{rangeValue}</div>
+      </div>
+      <style jsx>{`
+        .range-input-container {
+          position: relative;
+          height:fit-content;
+          min-height:40px;
+          width:100%;
+        }
+
+        .value-label {
+          position: absolute;
+          top: -25px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .custom-range-input {
+          --track-color: var(--txtc);
+          --track-width: 2px;
+          --thumb-color: var(--txtc);
+          --thumb-size: 15px;
+          width: 100%;
+        }
+
+        .custom-range-input::-webkit-slider-runnable-track {
+          background-color: var(--track-color);
+          height: var(--track-width);
+        }
+
+        .custom-range-input::-moz-range-track {
+          background-color: var(--track-color);
+          height: var(--track-width);
+        }
+
+        .custom-range-input::-webkit-slider-thumb {
+          background: var(--txtc);
+          width: var(--thumb-size);
+          height: var(--thumb-size);
+        }
+
+        .custom-range-input::-moz-range-thumb {
+          background-color: var(--txtc);
+          background:var(--txtc);
+          width: var(--thumb-size);
+          height: var(--thumb-size);
+        }
+
+        /* Marker styles */
+        .value-marker {
+          position: absolute;
+          top: -25px;
+          transform: translateX(-50%);
+        }
+      `}</style>
+    </div>
+  );
+};
+
+
+
+
 
 export default Input;
 
