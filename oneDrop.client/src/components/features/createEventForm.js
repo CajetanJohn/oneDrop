@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Input,  {RangeInput} from "../common/input";
+import Input,  {RangeInput, ImageInput} from "../common/input";
 import Switch from "../common/switch";
-import { SelectedSuggestion, Suggestion } from "../common/suggestionsArray";
 import SuggestionInput from "../common/suggestionsArray";
+import Select from "../common/select";
+
+
 const djNames = [
     "DJ Spinz",
     "DJ Snake",
@@ -77,71 +79,19 @@ const CreateEventForm = () => {
     const [eventLocationName, setEventLocationName] = useState("");
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
-    const [attendance, setAttendance] = useState({
-        dj: "",
-        appearance: "",
-        mc: "",
-        performances: ""
-    });
-    const [selectedDJs, setSelectedDJs] = useState([]);
-    const [selectedAppearances, setSelectedAppearances] = useState([]);
-    const [selectedMCs, setSelectedMCs] = useState([]);
-    const [selectedPerformances, setSelectedPerformances] = useState([]);
+    const [foccused, setFoccused] = useState('');
+    const [attendance, setAttendance] = useState({ attendance: {} });
     const [tickets, setTickets] = useState([{ name: "", quantity: "" }]);
     const [uploadedImages, setUploadedImages] = useState([]);
     const [selectedDayOption, setSelectedDayOption] = useState("");
     const [musicRequests, setMusicRequests] = useState({
+        allowed:false,
         price:0,
         genre:'',
         playtime:'',
     })
 
 
-    const [suggestions, setSuggestions] = useState([]);
-    const [inputValue, setInputValue] = useState("");
-    const [focusedInput, setFocusedInput] = useState(""); // Track focused input
-    const [showSuggestions, setShowSuggestions] = useState("")
-
-    //set suggestions as to be displayed
-    useEffect(() => {
-        // Filter suggestions based on focused input
-        const filterSuggestions = () => {
-            let filteredSuggestions = [];
-            switch (focusedInput) {
-                case "dj":
-                    filteredSuggestions = djNames.filter(name =>
-                        name.toLowerCase().includes(attendance.dj.toLowerCase())
-                    );
-                    break;
-                case "appearance":
-                    filteredSuggestions = kenyanCelebrities.filter(name =>
-                        name.toLowerCase().includes(attendance.appearance.toLowerCase())
-                    );
-                    break;
-                case "mc":
-                    filteredSuggestions = kenyanMCs.filter(name =>
-                        name.toLowerCase().includes(attendance.mc.toLowerCase())
-                    );
-                    break;
-                case "performances":
-                    filteredSuggestions = kenyanCelebrities.filter(name =>
-                        name.toLowerCase().includes(attendance.performances.toLowerCase())
-                    );
-                    break;
-                default:
-                    break;
-            }
-            setSuggestions(filteredSuggestions);
-        };
-
-        // Show suggestions if input value is not empty
-        if (attendance.dj || attendance.appearance || attendance.mc || attendance.performances) {
-            setShowSuggestions(true);
-            filterSuggestions();
-        } else {
-            setShowSuggestions(false);
-        }
-    }, [attendance, focusedInput]);
 
     // Function to handle adding new ticket inputs
     const addTicket = () => {
@@ -149,12 +99,27 @@ const CreateEventForm = () => {
     };
 
 
+    const updateAttendance = (name, value) => {
+        setAttendance(prevState => ({
+            ...prevState,
+            attendance: {
+                ...prevState.attendance,
+                value
+            }
+        }));
+    };
+    
+    
+      
+
+
     // Function to handle file upload
-    const handleImageUpload = (event) => {
-        const files = Array.from(event.target.files);
+    const handleImageUpload = (value) => {
+        const files = Array.from(value);
         const images = files.map(file => URL.createObjectURL(file));
         setUploadedImages([...uploadedImages, ...images]);
     };
+    
 
     // Function to remove an uploaded image
     const removeImage = (index) => {
@@ -162,6 +127,17 @@ const CreateEventForm = () => {
         updatedImages.splice(index, 1);
         setUploadedImages(updatedImages);
     };
+
+    const shouldShow=(input)=>{
+        setFoccused(input)
+    }
+
+    const getDayOfWeek = () => {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const today = new Date();
+        return days[today.getDay()];
+    };
+    
 
     const submitData = ()=>{
         const event={
@@ -178,19 +154,12 @@ const CreateEventForm = () => {
                 playtime:0,
             },
             tickets:tickets,
-            attending:{
-                "dj":selectedDJs,
-                "performance":selectedPerformances,
-                "appearances":selectedAppearances,
-                "mc":selectedMCs,
-            }
-
+            attending:attendance
         }
     }
 
     return (
         <>
-            <Switch name='pass' onSwitch={(name, isChecked) => { console.log(name + " input for " + " is now " + isChecked) }} isOn={false} />
 
 
             <div className="details-container">
@@ -209,56 +178,58 @@ const CreateEventForm = () => {
 
             <div className="in-attendance-container">
                 <label>Attendance:</label>
-                <SuggestionInput suggestions={kenyanCelebrities} name="appearance" onChange={(value)=>{console.log(value); }}/>
-                <SuggestionInput suggestions={kenyanMCs} name="mc" onChange={(value)=>{console.log(value); }}/>
-                <SuggestionInput suggestions={djNames} name="dj" onChange={(value)=>{console.log(value); }}/>
-                <SuggestionInput suggestions={kenyanCelebrities} name="performance" onChange={(value)=>{console.log(value); }}/>
+                <SuggestionInput isShown={foccused} suggestions={kenyanCelebrities} name="appearance" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
+                <SuggestionInput isShown={foccused} suggestions={kenyanMCs} name="mc" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
+                <SuggestionInput isShown={foccused} suggestions={djNames} name="dj" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
+                <SuggestionInput isShown={foccused} suggestions={kenyanCelebrities} name="performance" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
 
             </div>
 
+            <Switch name='pass' onSwitch={(name, isChecked) => {setMusicRequests(prevState => ({...prevState, allowed:isChecked}))}} isOn={musicRequests.allowed} />
 
-            <div className="music-requests-container">
-                <Input type='number' id='request_price' name="price" labelText='music request price/song played' onChange={(name, value)=>{setMusicRequests({...musicRequests, price:value})}}/>
-                <Input type='text' id='genre' name="genre" labelText='genre-catalogue' onChange={(name, value)=>{setMusicRequests({...musicRequests, genre:value})}}/>
-                <RangeInput type='range' id='playtime' min={30} max={240}steps={30} name="playtime" labelText='Play time per request' onChange={(name, value)=>{setMusicRequests({...musicRequests, playtime:value})}}/>
-            </div>
+            {musicRequests.allowed && (
+                    <div className="music-requests-container">
+                        <Input type='number' id='request_price' name="price" labelText='music request price/song played' onChange={(name, value)=>{setMusicRequests({...musicRequests, price:value})}}/>
+                        <Input type='text' id='genre' name="genre" labelText='genre-catalogue' onChange={(name, value)=>{setMusicRequests({...musicRequests, genre:value})}}/>
+                        <RangeInput type='range' id='playtime' min={30} max={240}steps={30} name="playtime" labelText='Play time per request' onChange={(name, value)=>{setMusicRequests({...musicRequests, playtime:value})}}/>
+                    </div>
+                )
+
+            }
+
+
+            
 
 
 
             <div className="images-container">
-                <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
-                <div>
-                    {uploadedImages.map((image, index) => (
-                        <div key={index}>
-                            <img src={image} alt={`Uploaded ${index}`} style={{ width: "100px", height: "100px" }} />
-                            <button onClick={() => removeImage(index)}>Remove</button>
-                        </div>
-                    ))}
-                </div>
+                <ImageInput name='images' onChange={(name, images)=>handleImageUpload(images)}/>
             </div>
 
 
 
             <div className="repetition-container">
-                <select value={selectedDayOption} onChange={(e) => setSelectedDayOption(e.target.value)}>
-                    <option value="">Select Option</option>
-                    <option value="dayOfWeek">Exact Day of Week</option>
-                    <option value="today">Today</option>
-                    <option value="exactDate">Exact Date</option>
-                </select>                
+                <Select name='repetition' labelText='When would it happen again'value={selectedDayOption} 
+                options={[
+                    { value: 'today', label: 'Today only' },
+                    { value: getDayOfWeek(), label: `Every (${getDayOfWeek()})` },
+                    { value: 'exactDate', label: 'Exact Date' } 
+                  ]}
+                  onChange={(name, value) => setSelectedDayOption(value)}/>             
             </div>
+
 
 
 
             <div className="tickets-container">
                 {tickets.map((ticket, index) => (
-                    <div key={index}>
-                        <input type="text" value={ticket.name} placeholder="Ticket Name" onChange={(name, value) => {
+                    <div className="ticket-category" key={index}>
+                        <Input type="text" value={ticket.name} placeholder="Ticket Name" onChange={(name, value) => {
                             const newTickets = [...tickets];
                             newTickets[index].name = value;
                             setTickets(newTickets);
                         }} />
-                        <input type="number" value={ticket.quantity} placeholder="Quantity" onChange={(name, value) => {
+                        <Input type="number" value={ticket.quantity} placeholder="Quantity" onChange={(name, value) => {
                             const newTickets = [...tickets];
                             newTickets[index].quantity = value;
                             setTickets(newTickets);

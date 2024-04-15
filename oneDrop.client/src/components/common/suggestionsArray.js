@@ -57,16 +57,18 @@ const SuggestionInput = ({ suggestions, name, onChange, isShown, shouldShow }) =
         setIsFocused(isShown)
     }, [isShown])
 
+    useEffect(() => {
+       onChange(name, value);
+    }, [value])
+    
+
     const addValue = (item) => {
         const updatedValues = { ...value, [name]: Array.isArray(value[name]) ? [...value[name], item] : [item] };
         setValues(updatedValues);
-        
-        // Remove the selected item from the displayed options
         const updatedDisplayedOptions = options.filter(option => option !== item);
         setOptions(updatedDisplayedOptions);
         setInputValue('');
         setDisplayedOptions([]);
-        onChange(updatedValues);
     };
     
     const removeValue = (item) => {
@@ -76,42 +78,44 @@ const SuggestionInput = ({ suggestions, name, onChange, isShown, shouldShow }) =
         // Add the removed item back to the displayed options
         const updatedDisplayedOptions = [...options, item];
         setOptions(updatedDisplayedOptions);
-        
-        onChange(newValue);
     };
 
     const handleFocus = () => {
-        console.log(`Input focused: ${name}`);
-        shouldShow(name); // Pass the name to the parent component when focused
+        shouldShow(name);
     };
 
     const handleBlur = () => {
-        console.log(`Input blurred: ${name}`);
-        shouldShow(''); // Pass an empty string to the parent component when blurred
+        shouldShow('');
     };
+
+    const handleKeyPress = (event) => {
+        const enterKeyCode = 13; // Key code for Enter key
+        const isEnterKey = event.keyCode === enterKeyCode || event.key === 'Enter';
+        if (isEnterKey) {
+          addValue(event.target.value);
+        }
+      };
 
     const inputChange = (value) => {
         const filteredSuggestions = value.length > 0 ? options.filter(name =>
             name.toLowerCase().includes(value.toLowerCase())
         ) : [];
         setDisplayedOptions(filteredSuggestions);
-        setInputValue(value); // Update input value state
+        setInputValue(value);
     };
 
     return (
         <>
-            <div style={{ background: 'red' }}>
+            <div tabindex="0" onFocus={handleFocus} onBlur={handleBlur}>
                 {options.length > 0 && isFocused === name && <Suggestion suggestion={displayedOptions} add={(item) => addValue(item)} />}
                 <Input
                     type='text'
                     id={name}
                     name={name}
                     labelText={name}
-                    required={true}
                     value={inputValue}
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
                     onChange={(name, value) => inputChange(value)}
+                    onKeyPress={handleKeyPress}
                     error={''}
                 />
                 <SelectedSuggestion category={name} selected={value[name] || []} remove={(item) => removeValue(item)} />

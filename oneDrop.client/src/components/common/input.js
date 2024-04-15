@@ -235,6 +235,98 @@ export const RangeInput = ({ min, max, value , onChange, steps, labelText, id, n
 
 
 
+export const ImageInput = ({ name, value, onChange }) => {
+    const [images, setImages] = useState(value || []);
+    const [previewImages, setPreviewImages] = useState([]);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        onChange(name, images);
+    }, [images]);
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length + images.length > 5) {
+            alert("Maximum 5 images can be uploaded.");
+            return;
+        }
+        const newImages = files.slice(0, 5 - images.length);
+        setImages([...images, ...newImages]);
+        const newPreviewImages = newImages.map(file => URL.createObjectURL(file));
+        setPreviewImages([...previewImages, ...newPreviewImages]);
+    };
+
+    const handleRemoveImage = (index) => {
+        const newImages = [...images];
+        const newPreviewImages = [...previewImages];
+        newImages.splice(index, 1);
+        newPreviewImages.splice(index, 1);
+        setImages(newImages);
+        setPreviewImages(newPreviewImages);
+    };
+
+    const handleImageClick = (index) => {
+        setCurrentImageIndex(index);
+    };
+
+    return (
+        <div>
+            {images.length > 0 && (
+                <div className='image-preview'>
+                    <div style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
+                        <img src={previewImages[currentImageIndex]} alt={`Preview ${currentImageIndex}`} style={{ maxWidth: "100%", maxHeight: "500px" }} />
+                        <button onClick={() => handleRemoveImage(currentImageIndex)}>Remove</button>
+                    </div>
+                    <div className='smaller-image-preview' style={{ display: "flex" }}>
+                        {previewImages.map((preview, index) => (
+                            <div key={index} className='image-item' style={{border: currentImageIndex === index ? "2px solid red" : "2px solid transparent" }}>
+                                <img src={preview} alt={`Preview ${index}`} onClick={() => handleImageClick(index)} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+            {images.length < 7 && (
+                <input type="file" accept="image/*" multiple onChange={handleImageChange} />
+            )}
+
+            <style jsx>{`
+            .image-preview{
+              width:100%;
+              height:;
+                            
+            }
+            .smaller-image-preview{
+              display:flex;
+              flex-wrap:no-wrap;
+              width:100%;
+              height:50px;
+
+            }
+            .image-item{
+            margin-right:10px;
+            cursor:pointer;  
+            flex:1 50px 1;  
+            height:100%;                    
+            }
+
+            .image-item img{
+              width: 100%;
+              height: 100%; 
+            }
+
+
+
+
+            
+            `}</style>
+        </div>
+    );
+};
+
+
+
+
 
 
 export default Input;
