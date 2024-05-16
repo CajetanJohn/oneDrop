@@ -159,16 +159,16 @@ const CreateEventForm = () => {
     }
 
     return (
-        <>
+        <div className="create-event">
 
 
-            <div className="details-container">
+            <div className="details-container in-dv">
                 <Input type='text' id="event_title" name="eventTitle" labelText="Event Title" required={true} value={eventTitle} onChange={(name, value) => setEventTitle(value)} error={''} />
                 <Input type='text' id="event_location_name" name="eventLocationName" labelText="Location Name" required={true} value={eventLocationName} onChange={(name, value) => setEventLocationName(value)} error={''} />
             </div>
 
             
-            <div className="time-container">
+            <div className="time-container in-dv">
                 <label>Start Time:</label>
                 <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
                 <label>End Time:</label>
@@ -176,19 +176,19 @@ const CreateEventForm = () => {
             </div>
 
 
-            <div className="in-attendance-container">
+            <div className="in-attendance-container in-dv">
                 <label>Attendance:</label>
-                <SuggestionInput isShown={foccused} suggestions={kenyanCelebrities} name="appearance" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
-                <SuggestionInput isShown={foccused} suggestions={kenyanMCs} name="mc" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
-                <SuggestionInput isShown={foccused} suggestions={djNames} name="dj" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
-                <SuggestionInput isShown={foccused} suggestions={kenyanCelebrities} name="performance" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
+                <SuggestionInput className='suggestive-input' isShown={foccused} suggestions={kenyanCelebrities} name="appearance" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
+                <SuggestionInput className='suggestive-input' isShown={foccused} suggestions={kenyanMCs} name="mc" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
+                <SuggestionInput className='suggestive-input' isShown={foccused} suggestions={djNames} name="dj" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
+                <SuggestionInput className='suggestive-input' isShown={foccused} suggestions={kenyanCelebrities} name="performance" onChange={(name, value)=>{updateAttendance(name, value)}} shouldShow={shouldShow}/>
 
             </div>
 
             <Switch name='pass' onSwitch={(name, isChecked) => {setMusicRequests(prevState => ({...prevState, allowed:isChecked}))}} isOn={musicRequests.allowed} />
 
             {musicRequests.allowed && (
-                    <div className="music-requests-container">
+                    <div className="music-requests-container in-dv">
                         <Input type='number' id='request_price' name="price" labelText='music request price/song played' onChange={(name, value)=>{setMusicRequests({...musicRequests, price:value})}}/>
                         <Input type='text' id='genre' name="genre" labelText='genre-catalogue' onChange={(name, value)=>{setMusicRequests({...musicRequests, genre:value})}}/>
                         <RangeInput type='range' id='playtime' min={30} max={240}steps={30} name="playtime" labelText='Play time per request' onChange={(name, value)=>{setMusicRequests({...musicRequests, playtime:value})}}/>
@@ -202,13 +202,13 @@ const CreateEventForm = () => {
 
 
 
-            <div className="images-container">
+            <div className="images-container in-dv">
                 <ImageInput name='images' onChange={(name, images)=>handleImageUpload(images)}/>
             </div>
 
 
 
-            <div className="repetition-container">
+            <div className="repetition-container in-dv">
                 <Select name='repetition' labelText='When would it happen again'value={selectedDayOption} 
                 options={[
                     { value: 'today', label: 'Today only' },
@@ -221,7 +221,7 @@ const CreateEventForm = () => {
 
 
 
-            <div className="tickets-container">
+            <div className="tickets-container in-dv">
                 {tickets.map((ticket, index) => (
                     <div className="ticket-category" key={index}>
                         <Input type="text" value={ticket.name} placeholder="Ticket Name" onChange={(name, value) => {
@@ -243,10 +243,26 @@ const CreateEventForm = () => {
             <button onClick={submitData}></button>
 
             <style jsx>{`
+            .create-event{
+                display:block;
+                width:50vw;
+                height:fit-content;
+            }
+            .in-dv{
+                display:grid;
+                gap:10px;
+                margin:10px 0;
+            }
+            .suggestive-input{
+                margin:10px 0;
+                height:fit-content;
+                width:100%;
+                position:relative;                  
+            }
 
             
             `}</style>
-        </>
+        </div>
     )
 }
 
