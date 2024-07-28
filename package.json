@@ -17,6 +17,7 @@
     "@types/react": "~18.2.79",
     "expo-system-ui": "^3.0.7",
     "react-dom": "18.2.0",
+    "react-native-config": "^1.5.2",
     "react-native-element-dropdown": "^2.12.1",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-pager-view": "^6.3.3",
