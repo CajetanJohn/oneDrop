@@ -7,8 +7,8 @@ import Search from '../screens/Search';
 const BottomTabNavigator = createBottomTabNavigator();
 const BottomTab = () => (
   <BottomTabNavigator.Navigator>
-    <BottomTabNavigator.Screen name="TopTabs" component={TopTab} />
-    <BottomTabNavigator.Screen name="Search" component={Search} />
+    <BottomTabNavigator.Screen name="Playlist" component={TopTab} options={{headerShown:false}}/>
+    <BottomTabNavigator.Screen name="Search" component={Search} options={{headerShown:false}}/>
   </BottomTabNavigator.Navigator>
 );
 
