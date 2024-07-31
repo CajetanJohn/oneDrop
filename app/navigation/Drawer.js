@@ -7,12 +7,11 @@ import Profile from '../screens/(drawers)/Profile';
 import Bookmarks from '../screens/(drawers)/Bookmarks';
 import Premium from '../screens/(drawers)/Premium';
 
-
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView, Platform } from 'react-native';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { AntDesign, MaterialIcons, Feather, SimpleLineIcons, MaterialCommunityIcons, Entypo } from 'react-native-vector-icons';
-import { useTheme } from '../utils/SetTheme';
+import { AntDesign, MaterialIcons, Feather, SimpleLineIcons, MaterialCommunityIcons, Entypo, FontAwesome } from 'react-native-vector-icons';
+import { useTheme, theme } from '../utils/SetTheme'; // Adjust the path if necessary
 
 const CustomDrawerContent = (props) => {
   const { currentTheme } = useTheme(); // Use the current theme from context
@@ -20,6 +19,7 @@ const CustomDrawerContent = (props) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownHeight = useRef(new Animated.Value(0)).current;
   const dropdownOpacity = useRef(new Animated.Value(0)).current;
+
 
   const handleNavigation = (screen) => {
     navigation.navigate(screen);
@@ -47,7 +47,7 @@ const CustomDrawerContent = (props) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const renderThemeIcon = () => {
+  const renderThemeIcon = useCallback(() => {
     switch (currentTheme.name) {
       case 'light':
         return <Entypo name="light-up" size={24} color={currentTheme.iconColor} />;
@@ -59,11 +59,10 @@ const CustomDrawerContent = (props) => {
       default:
         return <FontAwesome name="assistive-listening-systems" size={24} color={currentTheme.iconColor} />;
     }
-  };
+  }, [currentTheme, theme]);
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.backgroundColor }]}>
-      {/* Profile Section */}
       <View style={styles.profileSection}>
         <View style={styles.imageContainer}>
           <Image
@@ -81,46 +80,46 @@ const CustomDrawerContent = (props) => {
       {/* Scrollable Content */}
       <ScrollView style={styles.scrollView}>
         {/* Divider */}
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: currentTheme.dividerColor }]} />
 
         {/* Navigation Buttons */}
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Profile')}>
           <MaterialIcons name="person" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Profile</Text>
+          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Profile</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Premium')}>
           <MaterialIcons name="workspace-premium" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Premium</Text>
+          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Premium</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Bookmarks')}>
           <Feather name="bookmark" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Bookmark</Text>
+          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Bookmark</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Monetization')}>
           <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Monetization</Text>
+          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Monetization</Text>
         </TouchableOpacity>
         
         {/* Bottom Divider */}
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: currentTheme.dividerColor }]} />
 
         {/* Dropdown Button */}
-        <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
+        <Pressable style={styles.dropdownButton} onPress={toggleDropdown}>
           <View style={styles.dropdownButtonContent}>
-            <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings & Support</Text>
-            <SimpleLineIcons name={isDropdownOpen ? 'arrow-up' : 'arrow-down'} size={16} color={currentTheme.iconColor} />
+            <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Settings & Support</Text>
+            <SimpleLineIcons name={isDropdownOpen ? 'arrow-up' : 'arrow-down'} size={16} color={isDropdownOpen ? currentTheme.iconColor : currentTheme.specialIconColor} />
           </View>
-        </TouchableOpacity>
+        </Pressable>
 
         {/* Animated Dropdown Content */}
         <Animated.View style={[styles.dropdownContent, { height: dropdownHeight, opacity: dropdownOpacity }]}>
           <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Settings')}>
             <AntDesign name="setting" size={16} color={currentTheme.iconColor} />
-            <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings</Text>
+            <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Settings</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Support')}>
             <Feather name="help-circle" size={16} color={currentTheme.iconColor} />
-            <Text style={[styles.buttonText, { color: currentTheme.color }]}>Help Centre</Text>
+            <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Help Centre</Text>
           </TouchableOpacity>
         </Animated.View>
       </ScrollView>
@@ -138,14 +137,12 @@ const CustomDrawerContent = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // Default background color; will be overridden by theme
   },
   profileSection: {
     paddingTop: 10,
     paddingHorizontal: 20,
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5', // Optional: background color for profile section
-    position: 'relative', // To position the icon on the right
+    alignItems: 'flex-start',
+    position: 'relative',
   },
   imageContainer: {
     width: 80,
@@ -169,7 +166,10 @@ const styles = StyleSheet.create({
   headerIcon: {
     position: 'absolute',
     right: 20,
-    top: 10,
+    top: '50%',
+    transform: [
+      { translateY: '-50%' }, // Offset by half of its height
+    ],
   },
   scrollView: {
     flex: 1,
@@ -177,7 +177,6 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 1,
-    backgroundColor: '#ddd',
     marginVertical: 10,
   },
   button: {
@@ -214,8 +213,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 });
-
-
 
 
 const Drawer = createDrawerNavigator();
