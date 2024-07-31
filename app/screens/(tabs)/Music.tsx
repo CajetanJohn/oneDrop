@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import ThemeSwitcher from '../../components/themeSwitcher';
 
-const PlayList = () => (
+const Music = () => (
     <View>
       <Text>Play list</Text>
       <ThemeSwitcher/>
@@ -9,4 +9,4 @@ const PlayList = () => (
   );
 
 
-  export default PlayList
+  export default Music

@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import PlayList from '../screens/(tabs)/PlayList';
 import OnlinePlayList from '../screens/(tabs)/OnlinePlayList';
+import Music from '../screens/(tabs)/Music';
 
 
 // Create top tab navigator
@@ -19,8 +19,8 @@ const TopTab = () => (
       },
     }}
   >
-    <TopTabNavigator.Screen name="PlayList" component={PlayList} options={{ tabBarLabel: 'Play List' }} />
-    <TopTabNavigator.Screen name="OnlinePlayList" component={OnlinePlayList} options={{ tabBarLabel: 'Online Music' }} />
+    <TopTabNavigator.Screen name="Music" component={Music} options={{ tabBarLabel: 'For you' }} />
+    <TopTabNavigator.Screen name="OnlinePlayList" component={OnlinePlayList} options={{ tabBarLabel: 'Stream online' }} />
   </TopTabNavigator.Navigator>
 );
 

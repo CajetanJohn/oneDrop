@@ -2,14 +2,20 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import StackNavigator from './Stacks';
 import Settings from '../screens/(drawers)/Settings';
 import Monetization from '../screens/(drawers)/Monetization';
-
-
+import Support from '../screens/(drawers)/Support';
+import Profile from '../screens/(drawers)/Profile';
+import Bookmarks from 
 
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { AntDesign, MaterialIcons, Feather, SimpleLineIcons } from 'react-native-vector-icons';
+import { useTheme } from '../utils/SetTheme';
+
+
 
 const CustomDrawerContent = (props) => {
+  const { currentTheme } = useTheme(); // Use the current theme from context
   const navigation = useNavigation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownHeight = useRef(new Animated.Value(0)).current;
@@ -51,8 +57,8 @@ const CustomDrawerContent = (props) => {
             style={styles.image}
           />
         </View>
-        <Text style={styles.name}>John Doe</Text>
-        <Text style={styles.email}>john.doe@example.com</Text>
+        <Text style={[styles.name, { color: currentTheme.color }]}>John Doe</Text>
+        <Text style={[styles.email, { color: currentTheme.color }]}>john.doe@example.com</Text>
       </View>
 
       {/* Scrollable Content */}
@@ -62,10 +68,16 @@ const CustomDrawerContent = (props) => {
 
         {/* Navigation Buttons */}
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Settings')}>
-          <Text style={styles.buttonText}>Settings</Text>
+          <AntDesign name="setting" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Monetization')}>
-          <Text style={styles.buttonText}>Monetization</Text>
+          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Monetization</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Profile')}>
+          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Profile</Text>
         </TouchableOpacity>
 
         {/* Bottom Divider */}
@@ -73,16 +85,21 @@ const CustomDrawerContent = (props) => {
 
         {/* Dropdown Button */}
         <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
-          <Text style={styles.buttonText}>More Options</Text>
+          <View style={styles.dropdownButtonContent}>
+            <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings & Support</Text>
+            <SimpleLineIcons name={isDropdownOpen ? 'arrow-up' : 'arrow-down'} size={16} color={currentTheme.iconColor} style={styles.icon} />
+          </View>
         </TouchableOpacity>
 
         {/* Animated Dropdown Content */}
         <Animated.View style={[styles.dropdownContent, { height: dropdownHeight, opacity: dropdownOpacity }]}>
-          <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Option1')}>
-            <Text style={styles.buttonText}>Option 1</Text>
+          <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Settings')}>
+            <AntDesign name="setting" size={20} color={currentTheme.iconColor} style={styles.icon} />
+            <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Option2')}>
-            <Text style={styles.buttonText}>Option 2</Text>
+          <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Support')}>
+            <Feather name="help-circle" size={20} color={currentTheme.iconColor} style={styles.icon} />
+            <Text style={[styles.buttonText, { color: currentTheme.color }]}>Help Centre</Text>
           </TouchableOpacity>
         </Animated.View>
       </ScrollView>
@@ -90,7 +107,7 @@ const CustomDrawerContent = (props) => {
       {/* Another Button Fixed at the Bottom */}
       <View style={styles.bottomButtonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('AnotherButton')}>
-          <Text style={styles.buttonText}>Another Button</Text>
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Another Button</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -124,7 +141,6 @@ const styles = StyleSheet.create({
   },
   email: {
     fontSize: 14,
-    color: '#888',
     marginVertical: 10,
   },
   scrollView: {
@@ -137,19 +153,32 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   button: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 15,
   },
   buttonText: {
     fontSize: 16,
+    marginLeft: 10,
+  },
+  icon: {
+    // Add any additional styling for icons here
   },
   dropdownButton: {
     paddingVertical: 15,
+  },
+  dropdownButtonContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   dropdownContent: {
     overflow: 'hidden',
     paddingVertical: 10,
   },
   dropdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 10,
   },
   bottomButtonContainer: {
@@ -160,15 +189,16 @@ const styles = StyleSheet.create({
 
 
 
-
-
-
 const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => (
   <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
     <Drawer.Screen name="Main" component={StackNavigator} options={{ drawerItemStyle: { display: 'none' } }} />
     <Drawer.Screen name="Settings" component={Settings} />
     <Drawer.Screen name="Monetization" component={Monetization} />
+    <Drawer.Screen name="Profile" component={Profile} />
+    <Drawer.Screen name="Support" component={Support} />
+
+
   </Drawer.Navigator>
 );
 

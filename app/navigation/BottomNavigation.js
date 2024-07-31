@@ -1,15 +1,75 @@
-
+// BottomTab.tsx
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Feather, FontAwesome, SimpleLineIcons, MaterialIcons, MaterialCommunityIcons } from 'react-native-vector-icons';
 import TopTab from './TopNavigation';
-import Search from '../screens/Search';
+import History from '../screens/(tabs)/History';
+import { useTheme } from '../utils/SetTheme';
+import Events from '../screens/(tabs)/Events';
 
-// Create bottom tab navigator
 const BottomTabNavigator = createBottomTabNavigator();
-const BottomTab = () => (
-  <BottomTabNavigator.Navigator>
-    <BottomTabNavigator.Screen name="Playlist" component={TopTab} options={{headerShown:false}}/>
-    <BottomTabNavigator.Screen name="Search" component={Search} options={{headerShown:false}}/>
-  </BottomTabNavigator.Navigator>
-);
+
+const BottomTab = () => {
+  const { currentTheme } = useTheme();
+
+  return (
+    <BottomTabNavigator.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: currentTheme.background, // Set tab bar background color
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+      }}
+    >
+      <BottomTabNavigator.Screen
+        name="Playlist"
+        component={TopTab}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            focused ? (
+              <FontAwesome name="music" size={24} color={currentTheme.iconColor} />
+            ) : (
+              <Feather name="music" size={24} color={currentTheme.iconColor} />
+            )
+          ),
+          tabBarLabel: () => null, // Hide the label
+        }}
+      />
+      <BottomTabNavigator.Screen
+        name="Events"
+        component={Events}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            focused ? (
+              <MaterialIcons name="event" size={24} color={currentTheme.iconColor} />
+            ) : (
+              <SimpleLineIcons name="event" size={24} color={currentTheme.iconColor} />
+            )
+          ),
+          tabBarLabel: () => null, // Hide the label
+        }}
+      />
+      <BottomTabNavigator.Screen
+        name="History"
+        component={History}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            focused ? (
+              <FontAwesome name="history" size={24} color={currentTheme.iconColor} />
+            ) : (
+              <MaterialCommunityIcons name="history" size={24} color={currentTheme.iconColor} />
+            )
+          ),
+          tabBarLabel: () => null, // Hide the label
+        }}
+      />
+    </BottomTabNavigator.Navigator>
+  );
+};
 
 export default BottomTab;
