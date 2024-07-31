@@ -4,15 +4,15 @@ import Settings from '../screens/(drawers)/Settings';
 import Monetization from '../screens/(drawers)/Monetization';
 import Support from '../screens/(drawers)/Support';
 import Profile from '../screens/(drawers)/Profile';
-import Bookmarks from '../screens/(drawers)/Bookmarks'
+import Bookmarks from '../screens/(drawers)/Bookmarks';
+import Premium from '../screens/(drawers)/Premium';
+
 
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { AntDesign, MaterialIcons, Feather, SimpleLineIcons } from 'react-native-vector-icons';
+import { AntDesign, MaterialIcons, Feather, SimpleLineIcons, MaterialCommunityIcons, Entypo } from 'react-native-vector-icons';
 import { useTheme } from '../utils/SetTheme';
-
-
 
 const CustomDrawerContent = (props) => {
   const { currentTheme } = useTheme(); // Use the current theme from context
@@ -47,8 +47,22 @@ const CustomDrawerContent = (props) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const renderThemeIcon = () => {
+    switch (currentTheme.name) {
+      case 'light':
+        return <Entypo name="light-up" size={24} color={currentTheme.iconColor} />;
+      case 'dark':
+        return <MaterialIcons name="dark-mode" size={24} color={currentTheme.iconColor} />;
+      case 'custom':
+        return <AntDesign name="customerservice" size={24} color={currentTheme.iconColor} />;
+      case 'system':
+      default:
+        return <FontAwesome name="assistive-listening-systems" size={24} color={currentTheme.iconColor} />;
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: currentTheme.backgroundColor }]}>
       {/* Profile Section */}
       <View style={styles.profileSection}>
         <View style={styles.imageContainer}>
@@ -59,6 +73,9 @@ const CustomDrawerContent = (props) => {
         </View>
         <Text style={[styles.name, { color: currentTheme.color }]}>John Doe</Text>
         <Text style={[styles.email, { color: currentTheme.color }]}>john.doe@example.com</Text>
+        <TouchableOpacity style={styles.headerIcon} onPress={() => navigation.navigate('Modal')}>
+          <MaterialCommunityIcons name="dots-vertical-circle-outline" size={24} color={currentTheme.iconColor} />
+        </TouchableOpacity>
       </View>
 
       {/* Scrollable Content */}
@@ -68,23 +85,22 @@ const CustomDrawerContent = (props) => {
 
         {/* Navigation Buttons */}
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Profile')}>
-          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <MaterialIcons name="person" size={20} color={currentTheme.iconColor} />
           <Text style={[styles.buttonText, { color: currentTheme.color }]}>Profile</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Premium')}>
-          <AntDesign name="setting" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <MaterialIcons name="workspace-premium" size={20} color={currentTheme.iconColor} />
           <Text style={[styles.buttonText, { color: currentTheme.color }]}>Premium</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Bookmarks')}>
-          <AntDesign name="setting" size={20} color={currentTheme.iconColor} style={styles.icon} />
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Bookmarks</Text>
+          <Feather name="bookmark" size={20} color={currentTheme.iconColor} />
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Bookmark</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Monetization')}>
-          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} />
           <Text style={[styles.buttonText, { color: currentTheme.color }]}>Monetization</Text>
         </TouchableOpacity>
         
-
         {/* Bottom Divider */}
         <View style={styles.divider} />
 
@@ -92,18 +108,18 @@ const CustomDrawerContent = (props) => {
         <TouchableOpacity style={styles.dropdownButton} onPress={toggleDropdown}>
           <View style={styles.dropdownButtonContent}>
             <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings & Support</Text>
-            <SimpleLineIcons name={isDropdownOpen ? 'arrow-up' : 'arrow-down'} size={16} color={currentTheme.iconColor} style={styles.icon} />
+            <SimpleLineIcons name={isDropdownOpen ? 'arrow-up' : 'arrow-down'} size={16} color={currentTheme.iconColor} />
           </View>
         </TouchableOpacity>
 
         {/* Animated Dropdown Content */}
         <Animated.View style={[styles.dropdownContent, { height: dropdownHeight, opacity: dropdownOpacity }]}>
           <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Settings')}>
-            <AntDesign name="setting" size={20} color={currentTheme.iconColor} style={styles.icon} />
+            <AntDesign name="setting" size={16} color={currentTheme.iconColor} />
             <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.dropdownItem} onPress={() => handleNavigation('Support')}>
-            <Feather name="help-circle" size={20} color={currentTheme.iconColor} style={styles.icon} />
+            <Feather name="help-circle" size={16} color={currentTheme.iconColor} />
             <Text style={[styles.buttonText, { color: currentTheme.color }]}>Help Centre</Text>
           </TouchableOpacity>
         </Animated.View>
@@ -112,7 +128,7 @@ const CustomDrawerContent = (props) => {
       {/* Another Button Fixed at the Bottom */}
       <View style={styles.bottomButtonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('AnotherButton')}>
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Another Button</Text>
+          {renderThemeIcon()}
         </TouchableOpacity>
       </View>
     </View>
@@ -122,12 +138,14 @@ const CustomDrawerContent = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // Default background color; will be overridden by theme
   },
   profileSection: {
-    paddingTop: 50, // Adjust this value to fit your design
+    paddingTop: 10,
     paddingHorizontal: 20,
     alignItems: 'center',
     backgroundColor: '#f5f5f5', // Optional: background color for profile section
+    position: 'relative', // To position the icon on the right
   },
   imageContainer: {
     width: 80,
@@ -147,6 +165,11 @@ const styles = StyleSheet.create({
   email: {
     fontSize: 14,
     marginVertical: 10,
+  },
+  headerIcon: {
+    position: 'absolute',
+    right: 20,
+    top: 10,
   },
   scrollView: {
     flex: 1,
@@ -184,13 +207,14 @@ const styles = StyleSheet.create({
   dropdownItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 8, // Smaller padding for dropdown items
   },
   bottomButtonContainer: {
     paddingHorizontal: 20,
     paddingBottom: 20,
   },
 });
+
 
 
 
