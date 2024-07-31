@@ -1,4 +1,3 @@
-// deviceInfo/combinedDeviceInfo.js
 import { useBatteryInfo } from './batteryInfo';
 import { useLocationInfo } from './locationInfo';
 import { useMediaInfo } from './mediaInfo';
