@@ -4,7 +4,7 @@ import Settings from '../screens/(drawers)/Settings';
 import Monetization from '../screens/(drawers)/Monetization';
 import Support from '../screens/(drawers)/Support';
 import Profile from '../screens/(drawers)/Profile';
-import Bookmarks from 
+import Bookmarks from '../screens/(drawers)/Bookmarks'
 
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView } from 'react-native';
@@ -67,18 +67,23 @@ const CustomDrawerContent = (props) => {
         <View style={styles.divider} />
 
         {/* Navigation Buttons */}
-        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Settings')}>
+        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Profile')}>
+          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Premium')}>
           <AntDesign name="setting" size={20} color={currentTheme.iconColor} style={styles.icon} />
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Settings</Text>
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Premium</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Bookmarks')}>
+          <AntDesign name="setting" size={20} color={currentTheme.iconColor} style={styles.icon} />
+          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Bookmarks</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Monetization')}>
           <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} style={styles.icon} />
           <Text style={[styles.buttonText, { color: currentTheme.color }]}>Monetization</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Profile')}>
-          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} style={styles.icon} />
-          <Text style={[styles.buttonText, { color: currentTheme.color }]}>Profile</Text>
-        </TouchableOpacity>
+        
 
         {/* Bottom Divider */}
         <View style={styles.divider} />
@@ -197,6 +202,8 @@ const DrawerNavigator = () => (
     <Drawer.Screen name="Monetization" component={Monetization} />
     <Drawer.Screen name="Profile" component={Profile} />
     <Drawer.Screen name="Support" component={Support} />
+    <Drawer.Screen name="Premium" component={Premium} />
+    <Drawer.Screen name="Bookmarks" component={Bookmarks}/>
 
 
   </Drawer.Navigator>
