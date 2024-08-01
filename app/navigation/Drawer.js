@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import StackNavigator from './Stacks';
-import Settings from '../screens/(drawers)/Settings';
+import SettingsNavigator from '../screens/(drawers)/settings/Settings';
 import Monetization from '../screens/(drawers)/Monetization';
 import Support from '../screens/(drawers)/Support';
 import Profile from '../screens/(drawers)/Profile';
@@ -219,12 +219,12 @@ const Drawer = createDrawerNavigator();
 const DrawerNavigator = () => (
   <Drawer.Navigator drawerContent={(props) => <CustomDrawerContent {...props} />}>
     <Drawer.Screen name="Main" component={StackNavigator} options={{ drawerItemStyle: { display: 'none' } }} />
-    <Drawer.Screen name="Settings" component={Settings} />
-    <Drawer.Screen name="Monetization" component={Monetization} />
-    <Drawer.Screen name="Profile" component={Profile} />
-    <Drawer.Screen name="Support" component={Support} />
-    <Drawer.Screen name="Premium" component={Premium} />
-    <Drawer.Screen name="Bookmarks" component={Bookmarks}/>
+    <Drawer.Screen name="Settings" component={SettingsNavigator} options={{ headerShown: false }}/>
+    <Drawer.Screen name="Monetization" component={Monetization} options={{ headerShown: false }}/>
+    <Drawer.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+    <Drawer.Screen name="Support" component={Support} options={{ headerShown: false }}/>
+    <Drawer.Screen name="Premium" component={Premium} options={{ headerShown: false }}/>
+    <Drawer.Screen name="Bookmarks" component={Bookmarks} />
 
 
   </Drawer.Navigator>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Switch, StyleSheet, Text } from 'react-native';
-import { useTheme } from '../utils/SetTheme';
+import { useTheme } from '../../utils/SetTheme';
 
 
 
