@@ -60,6 +60,7 @@ const BottomTab = () => {
         name="History"
         component={History}
         options={{
+          headerShown:false,
           tabBarIcon: ({ focused }) => (
             focused ? (
               <FontAwesome name="history" size={24} color={currentTheme.iconColor} />

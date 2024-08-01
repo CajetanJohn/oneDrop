@@ -1,6 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import StackNavigator from './Stacks';
 import SettingsNavigator from '../screens/(drawers)/settings/Settings';
 import Monetization from '../screens/(drawers)/Monetization';
 import Support from '../screens/(drawers)/Support';
@@ -10,9 +9,8 @@ import Premium from '../screens/(drawers)/Premium';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView, Pressable } from 'react-native';
 import { useTheme } from '../utils/SetTheme';
 import { AntDesign, MaterialIcons, Feather, SimpleLineIcons, MaterialCommunityIcons, Entypo, FontAwesome } from 'react-native-vector-icons';
-import SongDetails from '../screens/(modals)/SongDetails';
-import Splash from '../screens/Splash';
 import BottomTab from './BottomNavigation';
+import { RotateInUpLeft } from 'react-native-reanimated';
 
 const CustomDrawerContent = (props) => {
   const { currentTheme } = useTheme();
@@ -208,16 +206,22 @@ const Drawer = createDrawerNavigator();
 
 
 const DrawerNavigator = () => {
-  const { currentTheme } = useTheme(); 
+  const { currentTheme } = useTheme();
+
+  // Function to determine headerShown based on route name
+  const getHeaderShown = (routeName) => {
+    return routeName === "BottomTab";
+  };
 
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
-      screenOptions={{
+      screenOptions={({ route }) => ({
+        headerShown: getHeaderShown(route.name), // Use the function to determine header visibility
         headerStyle: {
-          backgroundColor: currentTheme.headerBackgroundColor, 
+          backgroundColor: currentTheme.headerBackgroundColor,
         },
-        headerTintColor: currentTheme.textColor, // Header text and icon color
+        headerTintColor: currentTheme.textColor,
         headerTitleStyle: {
           fontWeight: 'bold',
         },
@@ -227,19 +231,18 @@ const DrawerNavigator = () => {
         },
         drawerInactiveTintColor: currentTheme.inactiveTextColor,
         drawerActiveTintColor: currentTheme.activeTextColor,
-        drawerActiveBackgroundColor: currentTheme.drawerActiveBackgroundColor, 
-      }}
+        drawerActiveBackgroundColor: currentTheme.drawerActiveBackgroundColor,
+      })}
     >
       <Drawer.Screen
         name="BottomTab"
         component={BottomTab}
-        options={{ drawerItemStyle: { display: 'none' } }}
+        options={{ drawerItemStyle: { display: 'none' } }} // Hide in drawer
       />
       <Drawer.Screen
         name="Settings"
         component={SettingsNavigator}
         options={{
-          headerShown: true, // Show header
           title: 'Settings', // Custom title if needed
         }}
       />
@@ -247,7 +250,6 @@ const DrawerNavigator = () => {
         name="Monetization"
         component={Monetization}
         options={{
-          headerShown: true, // Show header
           title: 'Monetization', // Custom title if needed
         }}
       />
@@ -255,7 +257,6 @@ const DrawerNavigator = () => {
         name="Profile"
         component={Profile}
         options={{
-          headerShown: true, // Show header
           title: 'Profile', // Custom title if needed
         }}
       />
@@ -263,7 +264,6 @@ const DrawerNavigator = () => {
         name="Support"
         component={Support}
         options={{
-          headerShown: true, // Show header
           title: 'Support', // Custom title if needed
         }}
       />
@@ -271,7 +271,6 @@ const DrawerNavigator = () => {
         name="Premium"
         component={Premium}
         options={{
-          headerShown: true, // Show header
           title: 'Premium', // Custom title if needed
         }}
       />
@@ -279,12 +278,12 @@ const DrawerNavigator = () => {
         name="Bookmarks"
         component={Bookmarks}
         options={{
-          headerShown: true, // Show header
           title: 'Bookmarks', // Custom title if needed
         }}
       />
     </Drawer.Navigator>
   );
 };
+
 
 export default DrawerNavigator;

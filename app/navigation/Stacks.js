@@ -29,7 +29,7 @@ const StackNavigator = () => {
       <Stack.Screen
         name="Main"
         component={DrawerNavigator}
-        options={{ headerShown: false }} // Hide header for Splash screen
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Splash"
