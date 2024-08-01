@@ -1,4 +1,3 @@
-// BottomTab.tsx
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, FontAwesome, SimpleLineIcons, MaterialIcons, MaterialCommunityIcons } from 'react-native-vector-icons';
@@ -20,7 +19,11 @@ const BottomTab = () => {
         },
         tabBarLabelStyle: {
           fontSize: 12,
+          color: currentTheme.textColor, // Optional: Set tab bar label color if you have labels
         },
+        tabBarIcon: ({ focused, color }) => ({
+          color: color || currentTheme.iconColor,
+        }),
       }}
     >
       <BottomTabNavigator.Screen
@@ -35,7 +38,7 @@ const BottomTab = () => {
               <Feather name="music" size={24} color={currentTheme.iconColor} />
             )
           ),
-          tabBarLabel: () => null, // Hide the label
+          tabBarLabel: () => null,
         }}
       />
       <BottomTabNavigator.Screen
@@ -50,14 +53,13 @@ const BottomTab = () => {
               <SimpleLineIcons name="event" size={24} color={currentTheme.iconColor} />
             )
           ),
-          tabBarLabel: () => null, // Hide the label
+          tabBarLabel: () => null,
         }}
       />
       <BottomTabNavigator.Screen
         name="History"
         component={History}
         options={{
-          headerShown: false,
           tabBarIcon: ({ focused }) => (
             focused ? (
               <FontAwesome name="history" size={24} color={currentTheme.iconColor} />
@@ -65,7 +67,7 @@ const BottomTab = () => {
               <MaterialCommunityIcons name="history" size={24} color={currentTheme.iconColor} />
             )
           ),
-          tabBarLabel: () => null, // Hide the label
+          tabBarLabel: () => null,
         }}
       />
     </BottomTabNavigator.Navigator>

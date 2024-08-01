@@ -1,16 +1,17 @@
 // SecurityAccess.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from '../../utils/SetTheme';
+import Header from '../../../components/Header';
+import { useTheme } from '../../../utils/SetTheme';
 
-const Monetisation = ({ navigation }) => {
+const Monetization_Scheme = ({ navigation }) => {
   const { currentTheme } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <View style={styles.content}>
         <Text style={[styles.text, { color: currentTheme.textColor }]}>
-        Monetisation
+        Monetization_Scheme
         </Text>
       </View>
     </View>
@@ -29,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Monetisation;
+export default Monetization_Scheme;

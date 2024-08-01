@@ -5,6 +5,9 @@ const themes = {
     iconColor: '#000000',
     background: '#FFFFFF',
     color: '#000000',
+    dividerColor:'#FFFFFF',
+    drawerBackgroundColor: '#FFFFFF',
+    headerBackgroundColor: '#FFFFFF',
     specialIconColor:'red',
     backgroundImage: null,
     textColor: '#000000', // Example value
@@ -20,6 +23,9 @@ const themes = {
     background: '#000000',
     color: '#FFFFFF',
     specialIconColor:'red',
+    dividerColor:'#000000',
+    drawerBackgroundColor: '#000000',
+    headerBackgroundColor: '#000000',
     backgroundImage: null,
     textColor: '#FFFFFF', // Example value
     modalColor: '#333333', // Example value
@@ -32,10 +38,12 @@ const themes = {
     name:'custom',
     iconColor: '#FFF700',
     background: '#FF5733',
+    drawerBackgroundColor: '#FF5733',
+    headerBackgroundColor: '#FF5733',
     specialIconColor:'red',
     color: '#FFF700',
     backgroundImage: 'url-to-light-image.jpg',
-    textColor: '#000000', // Example value
+    textColor: '#FFF700', // Example value
     modalColor: '#FFAA00', // Example value
     alertColor: '#FF0000', // Example value
     shadowColor: 'rgba(0, 0, 0, 0.3)', // Example value
