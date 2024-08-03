@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import mockMusicFiles from '../../data/example/songs';
 import { useTheme } from '../../utils/SetTheme';
 
@@ -7,7 +7,7 @@ const Music = ({ navigation }) => {
   const { currentTheme } = useTheme();
 
   const handlePress = (song) => {
-    navigation.navigate('SongDetails', { song });
+    navigation.navigate('CurrentPlaying', { song }); // Pass the song details
   };
 
   const renderItem = ({ item }) => (
@@ -19,19 +19,16 @@ const Music = ({ navigation }) => {
   );
 
   return (
-      <FlatList
-        data={mockMusicFiles}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.fileName}
-        ItemSeparatorComponent={() => <View style={[styles.divider, { backgroundColor: currentTheme.dividerColor }]} />}
-      />
+    <FlatList
+      data={mockMusicFiles}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.fileName}
+      ItemSeparatorComponent={() => <View style={[styles.divider, { backgroundColor: currentTheme.dividerColor }]} />}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   item: {
     padding: 15,
     flexDirection: 'row',
@@ -44,8 +41,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    whiteSpace: 'nowrap', // For horizontal scrolling effect
-    textOverflow: 'ellipsis', // For horizontal scrolling effect
   },
   divider: {
     height: 1,

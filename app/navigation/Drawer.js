@@ -1,4 +1,3 @@
-import React, { useState, useRef, useCallback } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SettingsNavigator from '../screens/(drawers)/settings/Settings';
 import Monetization from '../screens/(drawers)/Monetization';
@@ -6,11 +5,14 @@ import Support from '../screens/(drawers)/Support';
 import Profile from '../screens/(drawers)/Profile';
 import Bookmarks from '../screens/(drawers)/Bookmarks';
 import Premium from '../screens/(drawers)/Premium';
-import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView, Pressable } from 'react-native';
+import TopTab from './TopNavigation';
 import { useTheme } from '../utils/SetTheme';
+
+
+
+import React, { useState, useRef, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Easing, ScrollView, Pressable } from 'react-native';
 import { AntDesign, MaterialIcons, Feather, SimpleLineIcons, MaterialCommunityIcons, Entypo, FontAwesome } from 'react-native-vector-icons';
-import BottomTab from './BottomNavigation';
-import { RotateInUpLeft } from 'react-native-reanimated';
 
 const CustomDrawerContent = (props) => {
   const { currentTheme } = useTheme();
@@ -63,35 +65,51 @@ const CustomDrawerContent = (props) => {
       <View style={styles.profileSection}>
         <View style={styles.imageContainer}>
           <Image
-            source={{ uri: 'https://example.com/your-image-url.jpg' }}
+            source={{ uri: 'https://example.com/your-image-url.jpg' }} // Replace with your image URL
             style={styles.image}
           />
         </View>
         <Text style={[styles.name, { color: currentTheme.color }]}>John Doe</Text>
         <Text style={[styles.email, { color: currentTheme.color }]}>john.doe@example.com</Text>
-        <TouchableOpacity style={styles.headerIcon} onPress={() => props.navigation.navigate('Modal')}>
-          <MaterialCommunityIcons name="dots-vertical-circle-outline" size={24} color={currentTheme.iconColor} />
-        </TouchableOpacity>
       </View>
 
       <ScrollView style={styles.scrollView}>
         <View style={[styles.divider, { backgroundColor: currentTheme.dividerColor }]} />
 
-        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Profile')}>
-          <MaterialIcons name="person" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Profile</Text>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: currentTheme.buttonBackground }]}
+          onPress={() => handleNavigation('Profile')}
+        >
+          <MaterialIcons name="person" size={20} color={currentTheme.buttonIconColor} />
+          <Text style={[styles.buttonText, { color: currentTheme.buttonTextColor }]}>Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Premium')}>
-          <MaterialIcons name="workspace-premium" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Premium</Text>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: currentTheme.buttonBackground }]}
+          onPress={() => handleNavigation('Premium')}
+        >
+          <MaterialIcons name="workspace-premium" size={20} color={currentTheme.buttonIconColor} />
+          <Text style={[styles.buttonText, { color: currentTheme.buttonTextColor }]}>Premium</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Bookmarks')}>
-          <Feather name="bookmark" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Bookmark</Text>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: currentTheme.buttonBackground }]}
+          onPress={() => handleNavigation('Bookmarks')}
+        >
+          <Feather name="bookmark" size={20} color={currentTheme.buttonIconColor} />
+          <Text style={[styles.buttonText, { color: currentTheme.buttonTextColor }]}>Bookmark</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleNavigation('Monetization')}>
-          <MaterialIcons name="attach-money" size={20} color={currentTheme.iconColor} />
-          <Text style={[styles.buttonText, { color: currentTheme.textColor }]}>Monetization</Text>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: currentTheme.buttonBackground }]}
+          onPress={() => handleNavigation('History')}
+        >
+          <MaterialCommunityIcons name="history" size={20} color={currentTheme.buttonIconColor} />
+          <Text style={[styles.buttonText, { color: currentTheme.buttonTextColor }]}>History</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: currentTheme.buttonBackground }]}
+          onPress={() => handleNavigation('Monetization')}
+        >
+          <MaterialIcons name="attach-money" size={20} color={currentTheme.buttonIconColor} />
+          <Text style={[styles.buttonText, { color: currentTheme.buttonTextColor }]}>Monetization</Text>
         </TouchableOpacity>
 
         <View style={[styles.divider, { backgroundColor: currentTheme.dividerColor }]} />
@@ -115,7 +133,7 @@ const CustomDrawerContent = (props) => {
         </Animated.View>
       </ScrollView>
 
-      <View style={styles.bottomButtonContainer}>
+      <View style={[styles.bottomButtonContainer, { backgroundColor: currentTheme.drawerFooterBackground }]}>
         <TouchableOpacity style={styles.button} onPress={() => handleNavigation('AnotherButton')}>
           {renderThemeIcon()}
         </TouchableOpacity>
@@ -173,6 +191,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
+    borderRadius: 5,
+    marginBottom: 10,
   },
   buttonText: {
     fontSize: 16,
@@ -201,23 +221,23 @@ const styles = StyleSheet.create({
   },
 });
 
+
+
 const Drawer = createDrawerNavigator();
-
-
 
 const DrawerNavigator = () => {
   const { currentTheme } = useTheme();
 
-  // Function to determine headerShown based on route name
+  // Determine headerShown based on route name
   const getHeaderShown = (routeName) => {
-    return routeName === "BottomTab";
+    return routeName === "TopTab";
   };
 
   return (
     <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={({ route }) => ({
-        headerShown: getHeaderShown(route.name), // Use the function to determine header visibility
+        headerShown: getHeaderShown(route.name),
         headerStyle: {
           backgroundColor: currentTheme.headerBackgroundColor,
         },
@@ -225,65 +245,63 @@ const DrawerNavigator = () => {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
-        headerShadowVisible: false,
         drawerStyle: {
           backgroundColor: currentTheme.drawerBackgroundColor,
         },
         drawerInactiveTintColor: currentTheme.inactiveTextColor,
         drawerActiveTintColor: currentTheme.activeTextColor,
         drawerActiveBackgroundColor: currentTheme.drawerActiveBackgroundColor,
+        // Bottom tab bar visibility
+        tabBarStyle: {
+          backgroundColor: currentTheme.tabBarBackground,
+          borderTopWidth: 0,
+        },
+        tabBarShowLabel: route.name !== 'Splash',
+        tabBarBackgroundColor: route.name === 'SongDetails' ? 'transparent' : currentTheme.tabBarBackground,
       })}
     >
       <Drawer.Screen
-        name="BottomTab"
-        component={BottomTab}
+        name="TopTab"
+        component={TopTab}
         options={{ drawerItemStyle: { display: 'none' } }} // Hide in drawer
       />
       <Drawer.Screen
         name="Settings"
         component={SettingsNavigator}
-        options={{
-          title: 'Settings', // Custom title if needed
-        }}
+        options={{ title: 'Settings' }}
+      />
+      <Drawer.Screen
+        name="History"
+        component={History}
+        options={{ title: 'History' }}
       />
       <Drawer.Screen
         name="Monetization"
         component={Monetization}
-        options={{
-          title: 'Monetization', // Custom title if needed
-        }}
+        options={{ title: 'Monetization' }}
       />
       <Drawer.Screen
         name="Profile"
         component={Profile}
-        options={{
-          title: 'Profile', // Custom title if needed
-        }}
+        options={{ title: 'Profile' }}
       />
       <Drawer.Screen
         name="Support"
         component={Support}
-        options={{
-          title: 'Support', // Custom title if needed
-        }}
+        options={{ title: 'Support' }}
       />
       <Drawer.Screen
         name="Premium"
         component={Premium}
-        options={{
-          title: 'Premium', // Custom title if needed
-        }}
+        options={{ title: 'Premium' }}
       />
       <Drawer.Screen
         name="Bookmarks"
         component={Bookmarks}
-        options={{
-          title: 'Bookmarks', // Custom title if needed
-        }}
+        options={{ title: 'Bookmarks' }}
       />
     </Drawer.Navigator>
   );
 };
-
 
 export default DrawerNavigator;

@@ -3,7 +3,8 @@ import React, { useRef, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, FlatList, Animated, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons'; // Make sure you install expo-vector-icons or use another icon library
+import { Ionicons } from '@expo/vector-icons';
+
 
 const { height: screenHeight } = Dimensions.get('window');
 
