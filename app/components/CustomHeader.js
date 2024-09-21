@@ -71,7 +71,8 @@ const CustomHeader = observer(({currentPage}) => {
   return (
     <View style={[styles.headerContainer, { paddingTop: notchHeight.top / 1.5}]}>
       <Text style={{ color: currentTheme.textColor, fontSize: currentTheme.smallFont }}>
-        BENJAMIN Aukapa
+        
+        BENJAMIN Mkapa
       </Text>
       <View style={styles.headerIcons}>
         { selectionControl?.getSelectionStatus?.active ?  (

@@ -77,49 +77,62 @@ export const SearchButton = () => {
         <Tooltip
           popover={
             isTooltipVisible && (
-              <Animated.View
-                style={[
-                  styles.tooltipContent,
+              <Animated.View style={[ styles.tooltipContent,
                   {
                     transform: [{ scale: scaleAnim }],
                     transformOrigin: 'top right',
                     backgroundColor: currentTheme.tertiaryBackground
                   },
-                ]}
-              >
+                ]} >
+
                 <Pressable onPress={() => console.log('Settings clicked')} style={styles.option}>
                   <Text style={styles.optionText}>Settings</Text>
                 </Pressable>
+
                 <Pressable onPress={() => console.log('Sound & Effects clicked')} style={styles.option}>
                   <Text style={styles.optionText}>Sound & Effects</Text>
                 </Pressable>
+
                 <Pressable onPress={() => console.log('Profile clicked')} style={styles.option}>
                   <Text style={styles.optionText}>Profile</Text>
                 </Pressable>
-                {/* Button to close tooltip */}
+
                 <Pressable onPress={handleCloseTooltip} style={styles.option}>
                   <Text style={styles.optionText}>Close</Text>
                 </Pressable>
+
               </Animated.View>
             )
           }
-          backgroundColor="transparent"
-          height={150}
-          width={300}
-          withPointer={false}
-          placement="auto"
-          onOpen={handleOpenTooltip}
-          containerStyle={{ position: 'absolute', top:20 }}
-          overlayColor='transparent'
-        >
+          backgroundColor="transparent" height={150} width={300} withPointer={false} placement="auto" onOpen={handleOpenTooltip} containerStyle={{ position: 'absolute', top:20 }} overlayColor='transparent' >
           
           <View>
             <Menu color={currentTheme.iconColor} size={24} />
           </View>
+
         </Tooltip>
       </View>
     );
   };
+
+
+
+  export const AddToPlaylist = observer(()=>{
+    const {currentTheme} = useTheme()
+
+    const onPress =()=>{
+      modalStore.openModal({
+        modalType: MODAL_TYPE.ADDING_AUDIOS_TO_PLAYLIST,
+        playlistId:"111",
+      })
+    }
+
+    return(
+      <Pressable onPress={onPress} style={styles.button}>
+        <AddIcon size={20} color={currentTheme.iconColor} />
+      </Pressable>
+    )
+  })
   
   
   
@@ -156,10 +169,6 @@ export default function MenuOptions({currentPage}){
       fontSize: 16,
       color: 'black',
     },
-
-
-
-
     toolTipContainer: {
     },
     tooltipContent: {

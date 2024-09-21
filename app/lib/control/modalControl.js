@@ -45,16 +45,9 @@ class ModalStore {
       setPlaylistName: action,
       getPlaylistName: computed,
       closeCurrentModal:action,
+      getModalData:computed,
     });
 
-
-
-    reaction(
-      () => this.selection.activityType,
-      async (activityType) => {
-        this.populateActivityData(activityType);
-      }
-    );
   }
 
 
@@ -81,6 +74,7 @@ class ModalStore {
         break;
 
       case MODAL_TYPE.ADDING_AUDIOS_TO_PLAYLIST:
+        this.modal[modalType].playlistId = playlistId;
         const newStatus = {
           srcId: "111",
           activityType: ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO,
@@ -101,7 +95,13 @@ class ModalStore {
   closeCurrentModal() {
 
     if (this.modal.modalStack.length > 0) {
-      const previousModalType = this.modal.modalStack.pop();
+
+      const modalLength = this.modal.modalStack.length;
+      const previousModalType = this.modal.modalStack[modalLength - 1];
+      
+      this.modal.modalStack.pop();
+      
+      
       this.modal.modalType = previousModalType;
       this.modal.isOpen = true;
       return;
@@ -116,6 +116,8 @@ class ModalStore {
     runInAction(() => {
       this.modal.modalStack = [];
       this.modal.isOpen = false;
+      this.modal[this.modal.modalType].playlistId = ''
+
       this.modal.modalType = '';
       this.calculateAndSetPlaylistName();
       selectionControl.turnOffSelection();
@@ -124,7 +126,7 @@ class ModalStore {
 
 
   get getModalData() {
-    return { modalType: this.modal.modalType, isOpen: this.modal.isOpen };
+    return { modalType: this.modal.modalType, isOpen: this.modal.isOpen, modalStack: this.modal.modalStack };
   }
 
 

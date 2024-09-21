@@ -1,6 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
-import { TrackList } from '../../screens/main/DeviceAudio'
 import LeftArrowIcon from '../../assets/icons/LeftArrowIcon'
 import { useTheme } from '../../lib/utils/SetTheme';
 import selectionControl from '../../lib/control/SelectionControl'
@@ -11,6 +10,8 @@ import generateUniqueId from '../../lib/utils/generateUniqueId';
 import { RadioButton } from '../inputs/RadioButton';
 import { current } from '@reduxjs/toolkit';
 import CloseIcon from '../../assets/icons/CloseIcon';
+import { TrackList } from '../TrackList';
+import { MODAL_TYPE } from '../../lib/constants/Variables';
 
 
 const EdgeIcon = observer(({onClose})=>{
@@ -19,12 +20,20 @@ const EdgeIcon = observer(({onClose})=>{
 
 
     const createPlaylist = ()=>{
-      const playlist = {
-        playlistName: modalStore.getPlaylistName,
-        tracks:selectionControl.getSelectionData?.itemsSelected || [],
-        id:playlistId
+      if(modalStore.getModalData.modalStack.includes(MODAL_TYPE.CREATING_A_NEW_PLAYLIST)){
+        const playlist = {
+          playlistName: modalStore.getPlaylistName,
+          tracks:selectionControl.getSelectionData?.itemsSelected || [],
+          id:playlistId
+        }
+        playlistStore.createPlaylist(playlist); 
+      } else{
+        playlistStore.addTrackToPlaylist(
+          modalStore?.modal[MODAL_TYPE.VIEWING_PLAYLIST_DETAILS].playlistId,
+          selectionControl.getSelectionData?.itemsSelected || [],
+        )
       }
-      playlistStore.createPlaylist(playlist);      
+           
       modalStore.closeAllModals();
       
     }
@@ -51,7 +60,7 @@ const SelectAudios = ({onClose}) => {
 
   return (
     <View style={{backgroundColor:'transparent'}}>
-         <View style={[styles.header, { backgroundColor: currentTheme.background }]}>
+         <View style={[styles.header, { backgroundColor: "red" }]}>
             <TouchableOpacity onPress={()=>onClose()}>
               <LeftArrowIcon  size={30} color={currentTheme.iconColor}/>
 

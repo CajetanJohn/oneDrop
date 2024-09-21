@@ -7,22 +7,17 @@ import { ACTIVITY_TYPE } from '../../lib/constants/Variables';
 import AudioItem from '../AudioItem';
 import selectionControl from '../../lib/control/SelectionControl';
 import MusicNoteIcon from '../../assets/icons/MusicNoteIcon';
-
-
+import modalStore from '../../lib/control/modalControl';
 import AddToFavoritesButton from '../interaction/AddToFavoritesButton';
-
-
-
+import { MODAL_TYPE } from '../../lib/constants/Variables';
 const headerHeight = 110;
 const iconedViewHeight = 280;
 
 
-
-
-
-
 import { observer } from 'mobx-react-lite';
-import SelectionOptions, { AddToPlaylist } from '../SelectionOptions';
+import SelectionOptions from '../SelectionOptions';
+import { AddToPlaylist } from '../menuOptions';
+
 
 
 const PlaylistDetails = observer(({ playlistId, onClose }) => {
@@ -98,12 +93,12 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
                     </View>
 
                     <View style={styles.headerTextRight}>
-                        {selectionControl.getSelectionData?.active ? (
+                        {selectionControl.getSelectionStatus?.active? (
                             <SelectionOptions/>
                         ) : (
                             <>
                                 <AddToFavoritesButton />
-                                <AddToPlaylist playlistId={playlistId} size={22} />
+                                <AddToPlaylist />
                             </>
                         )}
                     </View>

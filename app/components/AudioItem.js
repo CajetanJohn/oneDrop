@@ -6,7 +6,9 @@ import Menu from '../assets/icons/menu';
 import selectionControl from '../lib/control/SelectionControl';
 import { observer } from 'mobx-react-lite';
 import { ACTIVITY_TYPE } from '../lib/constants/Variables';
+
 const activityType = ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO;
+
 import { RadioButton } from './inputs/RadioButton';
 
 // Inline RadioButton component
@@ -42,19 +44,18 @@ const EdgeIcon = observer(({ audio, selectionMode, isSelected, onPress }) => {
 
 const AudioItem = observer(({ audio, index, playlistId }) => {
   const { currentTheme } = useTheme();
-  const {getSelectionStatus, } = selectionControl;
 
 
-  const selected = selectionControl.isItemSelected(audio.id, activityType); 
+  const selected = selectionControl.isItemSelected(audio.id); 
   
 
   const onPress = useCallback(() => {
     if (selectionControl.getSelectionStatus?.active && selectionControl.getSelectionStatus.activityType === activityType) {
-      selectionControl.selectItem(audio.id, activityType);
+      selectionControl.selectItem(audio.id);
     } else {
       console.log(audio);
     }
-  }, [audio.id, activityType]);
+  }, [activityType]);
   
   const switchSelectionMode = useCallback(() => {
     const newStatus = {
@@ -64,7 +65,7 @@ const AudioItem = observer(({ audio, index, playlistId }) => {
 
     selectionControl.setActivity(newStatus);
     onPress();
-  }, [audio.id, activityType, playlistId]);
+  }, [activityType]);
 
   // Memoize the JSX output
   const renderedItem = (

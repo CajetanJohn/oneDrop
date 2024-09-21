@@ -42,7 +42,7 @@ const CustomPlaylistItem = observer(({ item, onClick }) => {
   }
 
 
-  const selected = selectionControl.isItemSelected(item.id, activity.activityType);
+  const selected = selectionControl.isItemSelected(item.id);
  
  
   const onPress = useCallback(()=>{

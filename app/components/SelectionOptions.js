@@ -29,9 +29,9 @@ const SelectAllRadioButton = observer(() => {
 
 
 
-export const AddToPlaylist = observer(() => {
+export const SelectPlaylistButton = observer(() => {
   const { currentTheme } = useTheme();
-  const addToPlaylistRef = useRef(null);
+  const SelectPlaylistButtonRef = useRef(null);
 
   let isShown =( selectionControl.getSelectionData?.itemsSelected?.length > 0 &&
   selectionControl.getSelectionStatus?.activityType !== ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS
@@ -49,7 +49,7 @@ export const AddToPlaylist = observer(() => {
 
   return (
     <View>
-      <TouchableOpacity onPress={onPress} ref={addToPlaylistRef} style={styles.button}>
+      <TouchableOpacity onPress={onPress} ref={SelectPlaylistButtonRef} style={styles.button}>
           <AddIcon size={20} color={currentTheme.iconColor} />
         </TouchableOpacity>
     </View>
@@ -77,12 +77,12 @@ export const TrashSelectedIcon = () => {
 
   const logSelectedTracks = () => {
 
-    if(selectionControl.getSelectionStatus.activityType === ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS){
+    if(selectionControl.getSelectionStatus?.activityType === ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS){
       playlistStore.deletePlaylist(selectionControl.getSelectionData?.itemsSelected)
     }
-    else if(selectionControl.getSelectionStatus.activityType === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO){
+    else if(selectionControl.getSelectionStatus?.activityType === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO){
       playlistStore.deleteTrackFromPlaylist(
-        "111",
+        modalStore?.modal[MODAL_TYPE.VIEWING_PLAYLIST_DETAILS].playlistId || '111',
         selectionControl.getSelectionData?.itemsSelected
       )
     }
@@ -116,7 +116,7 @@ export const CloseSelectionModeIcon = () => {
 const SelectionOptions = observer(() => {
   return (
     <View style={styles.optionContainers}>
-      <AddToPlaylist />
+      <SelectPlaylistButton />
       <SelectAllRadioButton />
       <ShareSelectedIcon />
       <TrashSelectedIcon />
