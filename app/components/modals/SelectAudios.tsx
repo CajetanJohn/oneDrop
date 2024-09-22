@@ -8,10 +8,11 @@ import playlistStore from '../../lib/store/playlistStore';
 import modalStore from '../../lib/control/modalControl';
 import generateUniqueId from '../../lib/utils/generateUniqueId';
 import { RadioButton } from '../inputs/RadioButton';
-import { current } from '@reduxjs/toolkit';
 import CloseIcon from '../../assets/icons/CloseIcon';
 import { TrackList } from '../TrackList';
 import { MODAL_TYPE } from '../../lib/constants/Variables';
+
+
 
 
 const EdgeIcon = observer(({onClose})=>{
@@ -47,35 +48,36 @@ const EdgeIcon = observer(({onClose})=>{
               <Text>Done</Text>
             </Pressable>
             ) : (
-                <Pressable onPress={()=>onClose()}>
-                  <CloseIcon color={currentTheme.iconColor} size={29}/>
-                </Pressable>
+            <Pressable onPress={()=>onClose()}>
+              <CloseIcon color={currentTheme.iconColor} size={29}/>
+            </Pressable>
             )}
         </View>
     )
 })
 
+
+
 const SelectAudios = ({onClose}) => {
     const {currentTheme} = useTheme();
 
   return (
-    <View style={{backgroundColor:'transparent'}}>
+      <View style={{backgroundColor:'transparent'}}>
          <View style={[styles.header, { backgroundColor: "red" }]}>
             <TouchableOpacity onPress={()=>onClose()}>
               <LeftArrowIcon  size={30} color={currentTheme.iconColor}/>
-
             </TouchableOpacity>
+
             <EdgeIcon onClose={onClose}/>
 
-        </View>   
-       <TrackList  playlistId={"111"} />
-    </View>
+          </View>   
+            <TrackList  playlistId={"111"} />
+      </View>
   )
 }
 
 
 const styles = StyleSheet.create({
-    
     header: {
       position: "absolute",
       flexDirection: "row",
@@ -110,7 +112,6 @@ const styles = StyleSheet.create({
       gap: 4,
       marginBottom: 10,
     },
-   
     closeButton: {
       position: 'absolute',
       bottom: 20,

@@ -11,7 +11,7 @@ import { ACTIVITY_TYPE, MODAL_TYPE } from '../lib/constants/Variables';
 import modalStore from '../lib/control/modalControl';
 import { RadioButton } from './inputs/RadioButton';
 import playlistStore from '../lib/store/playlistStore';
-// SelectAllRadioButton Component
+
 
 
 const SelectAllRadioButton = observer(() => {
