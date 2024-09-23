@@ -27,19 +27,41 @@ const SelectAllRadioButton = observer(() => {
   );
 });
 
-
-
-export const SelectPlaylistButton = observer(() => {
+export const PopulatePLaylist = () => {
   const { currentTheme } = useTheme();
-  const SelectPlaylistButtonRef = useRef(null);
+
+  const onPress =()=>{
+    modalStore.openModal({
+      modalType: MODAL_TYPE.ADDING_AUDIOS_TO_PLAYLIST,
+    })    
+  }
+
+  return (
+    <View>
+      <TouchableOpacity onPress={onPress} style={styles.button}>
+          <AddIcon size={20} color={currentTheme.iconColor} />
+        </TouchableOpacity>
+    </View>
+  )
+}
+
+
+
+export const AddToPlaylist = observer(() => {
+  const { currentTheme } = useTheme();
+  const addToPlaylistRef = useRef(null);
 
   let isShown =( selectionControl.getSelectionData?.itemsSelected?.length > 0 &&
-  selectionControl.getSelectionStatus?.activityType !== ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS
+  selectionControl.getSelectionStatus?.activityType === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO
 )
+
+console.log(selectionControl.getSelectionStatus?.activityType);
+
+
   if(!isShown){
-    return false
+    return null
   }
-  // onPress function to toggle popover visibility
+  
   const onPress =()=>{
     modalStore.openModal({
       modalType: MODAL_TYPE.CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO,
@@ -49,7 +71,7 @@ export const SelectPlaylistButton = observer(() => {
 
   return (
     <View>
-      <TouchableOpacity onPress={onPress} ref={SelectPlaylistButtonRef} style={styles.button}>
+      <TouchableOpacity onPress={onPress} ref={addToPlaylistRef} style={styles.button}>
           <AddIcon size={20} color={currentTheme.iconColor} />
         </TouchableOpacity>
     </View>
@@ -77,12 +99,12 @@ export const TrashSelectedIcon = () => {
 
   const logSelectedTracks = () => {
 
-    if(selectionControl.getSelectionStatus?.activityType === ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS){
+    if(selectionControl.getSelectionStatus.activityType === ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS){
       playlistStore.deletePlaylist(selectionControl.getSelectionData?.itemsSelected)
     }
-    else if(selectionControl.getSelectionStatus?.activityType === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO){
+    else if(selectionControl.getSelectionStatus.activityType === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO){
       playlistStore.deleteTrackFromPlaylist(
-        modalStore?.modal[MODAL_TYPE.VIEWING_PLAYLIST_DETAILS].playlistId || '111',
+        "111",
         selectionControl.getSelectionData?.itemsSelected
       )
     }
@@ -116,7 +138,7 @@ export const CloseSelectionModeIcon = () => {
 const SelectionOptions = observer(() => {
   return (
     <View style={styles.optionContainers}>
-      <SelectPlaylistButton />
+      <AddToPlaylist />
       <SelectAllRadioButton />
       <ShareSelectedIcon />
       <TrashSelectedIcon />

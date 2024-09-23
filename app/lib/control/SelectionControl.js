@@ -102,7 +102,8 @@ class SelectionControl {
 
   setActivity(status) {
     const { activityType, srcId = '111' } = status;
-
+    console.log(activityType);
+    
       this.selection.activityType = activityType;
       this.selection.active =  true;
       this.selection[activityType].srcId = srcId || '';
@@ -111,7 +112,7 @@ class SelectionControl {
 
 
   populateActivityData(activityType) {
-    if (activityType.trim() === '') return;
+    if (!activityType) return;
     const { srcId } = this.selection[activityType];
     switch (activityType) {
 
@@ -140,7 +141,6 @@ class SelectionControl {
 
   get getSelectionData() {
     const { activityType } = this.selection;
-    if (activityType.trim() === ''){return null}
     return this.selection[activityType] || null;
   }
 
@@ -157,7 +157,7 @@ class SelectionControl {
 
   get areAllItemsSelected() {
     const { activityType } = this.selection;
-    if (activityType.trim() === '') return false;
+    if (!activityType) return false;
     return this.selection[activityType]?.itemsSelected.length === this.selection[activityType]?.srcItems.length;
   }
 

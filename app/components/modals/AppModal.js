@@ -9,18 +9,11 @@ import { useTheme } from '../../lib/utils/SetTheme';
 import { MODAL_TYPE } from '../../lib/constants/Variables';
 import modalStore from '../../lib/control/modalControl';
 
-
-
 const AppModal = observer(() => {
   const status = modalStore.getModalData;
   const { currentTheme } = useTheme();
-  const [backPressHandled, setBackPressHandled] = useState(false)
+  const [backPressHandled, setBackPressHandled] = useState(false);
 
-  useEffect(() => {
-    console.log(status);
-    
-  }, [modalStore.getModalData])
-  
   const child = () => {
     switch (status.modalType) {
       case MODAL_TYPE.CREATING_A_NEW_PLAYLIST:
@@ -39,28 +32,25 @@ const AppModal = observer(() => {
   // Back handler logic
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-    console.log('Closing modal, current modalType:', modalStore.modal.modalType);
-
       if (status?.isOpen && !backPressHandled) {
-
-        setBackPressHandled(true);
+        setBackPressHandled(true); // Prevent multiple triggers
         handleClose();       
         return true;
       }
       return false;
     });
 
+    // Reset back press handler after the modal is closed or when the modal stack updates
     return () => {
-      setBackPressHandled(false)
+      setBackPressHandled(false); // Reset backPressHandled when unmounting or modal updates
       backHandler.remove();
     };
-  }, []); 
+  }, [status?.isOpen, backPressHandled]); // Dependencies: handle back presses only when the modal is open
 
   const handleClose = () => {
-    console.log("called");
-    
+    console.log('Closing modal, current modalType:', modalStore.modal.modalType);
     modalStore.closeCurrentModal();
-    setBackPressHandled(false);
+    setBackPressHandled(false); // Reset the flag after the close
   };
 
   return (
@@ -68,10 +58,10 @@ const AppModal = observer(() => {
       transparent={true}
       animationType="slide"
       visible={status?.isOpen}
-      onRequestClose={handleClose}
+      onRequestClose={handleClose}  // Handle Android back button
       statusBarTranslucent={true}
     >
-      <SafeAreaView style={[{ backgroundColor: "blue", flex: 1 }]}>
+      <SafeAreaView style={[{ backgroundColor: currentTheme.background, flex: 1 }]}>
         {child()}
       </SafeAreaView>
     </Modal>

@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
+import { TrackList } from '../../screens/main/DeviceAudio'
 import LeftArrowIcon from '../../assets/icons/LeftArrowIcon'
 import { useTheme } from '../../lib/utils/SetTheme';
 import selectionControl from '../../lib/control/SelectionControl'
@@ -9,10 +10,7 @@ import modalStore from '../../lib/control/modalControl';
 import generateUniqueId from '../../lib/utils/generateUniqueId';
 import { RadioButton } from '../inputs/RadioButton';
 import CloseIcon from '../../assets/icons/CloseIcon';
-import { TrackList } from '../TrackList';
 import { MODAL_TYPE } from '../../lib/constants/Variables';
-
-
 
 
 const EdgeIcon = observer(({onClose})=>{
@@ -21,18 +19,19 @@ const EdgeIcon = observer(({onClose})=>{
 
 
     const createPlaylist = ()=>{
-      if(modalStore.getModalData.modalStack.includes(MODAL_TYPE.CREATING_A_NEW_PLAYLIST)){
+      if(modalStore.modal[MODAL_TYPE.ADDING_AUDIOS_TO_PLAYLIST].playlistId.trim() !== ''){
+        playlistStore.addTrackToPlaylist(
+          modalStore.modal[MODAL_TYPE.ADDING_AUDIOS_TO_PLAYLIST].playlistId,
+          selectionControl.getSelectionData?.itemsSelected || []
+        )      
+      }
+      else{
         const playlist = {
           playlistName: modalStore.getPlaylistName,
           tracks:selectionControl.getSelectionData?.itemsSelected || [],
           id:playlistId
         }
         playlistStore.createPlaylist(playlist); 
-      } else{
-        playlistStore.addTrackToPlaylist(
-          modalStore?.modal[MODAL_TYPE.VIEWING_PLAYLIST_DETAILS].playlistId,
-          selectionControl.getSelectionData?.itemsSelected || [],
-        )
       }
            
       modalStore.closeAllModals();
@@ -62,8 +61,8 @@ const SelectAudios = ({onClose}) => {
     const {currentTheme} = useTheme();
 
   return (
-      <View style={{backgroundColor:'transparent'}}>
-         <View style={[styles.header, { backgroundColor: "red" }]}>
+    <View style={{backgroundColor:'transparent'}}>
+         <View style={[styles.header, { backgroundColor: currentTheme.background }]}>
             <TouchableOpacity onPress={()=>onClose()}>
               <LeftArrowIcon  size={30} color={currentTheme.iconColor}/>
             </TouchableOpacity>
