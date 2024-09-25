@@ -33,7 +33,7 @@ const PlaylistName = observer(({ onClose }) => {
               })
             return;
         }
-        playlistStore.addPlaylist(modalStore.getPlaylistName.trim(), tracks);
+        playlistStore.createPlaylist(modalStore.getPlaylistName.trim(), tracks);
         onClose();
     };
 
@@ -106,6 +106,7 @@ const PlaylistName = observer(({ onClose }) => {
                             placeholderTextColor={currentTheme.textColor}
                             value={modalStore.getPlaylistName}
                             onChangeText={(value) => modalStore.setPlaylistName(value)}
+                            selectTextOnFocus={true}
                         />
 
                         <View style={styles.inputButtons}>

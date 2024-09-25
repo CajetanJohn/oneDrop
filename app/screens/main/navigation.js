@@ -1,22 +1,27 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
-import { Text, View, Animated, StyleSheet, Dimensions, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import { Text, View, Animated, StyleSheet, Dimensions, TouchableOpacity, ScrollView, StatusBar, BackHandler, ToastAndroid } from 'react-native';
 import { TabView } from 'react-native-tab-view';
 import { observer } from 'mobx-react';
 import { useTheme } from '../../lib/utils/SetTheme';
 import selectionControl from '../../lib/control/SelectionControl';
 import CustomHeader from '../../components/CustomHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AppModal from '../../components/modals/AppModal';
+import DeviceAudioScreen from './DeviceAudio';
+import StreamOnline from './StreamOnline';
+import EventsScreen from './Events';
+import AllPlaylists from './AllPlaylists';
 import {
   DEVICE_AUDIO_SCREEN,
   STREAM_ONLINE_SCREEN,
   ALL_SAVED_PLAYLIST_SCREEN,
   EVENT_SCREEN,
 } from '@env';
-import AppModal from '../../components/modals/AppModal';
-import DeviceAudioScreen from './DeviceAudio';
-import StreamOnline from './StreamOnline';
-import EventsScreen from './Events';
-import AllPlaylists from './AllPlaylists';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthStack from '../auth/navigation';
+
+
+
+
 
 // Custom Tab Bar Label Component
 const CustomTabBarLabel = React.memo(({ children, focused, onPress }) => {
@@ -74,26 +79,41 @@ const MainNavigation = observer(() => {
     }).start();
   }, [centerOffset]);
 
-
- useEffect(() => {
-    // Define the async function
-    const asyncEffect = async () => {
-      try {
-        if(selectionControl.getSelectionStatus.active){
-        await selectionControl.turnOffSelection()
-      };
-      } catch (error) {
+  // Handle back button press on Android
+  useEffect(() => {
+    const handleBackPress = () => {
+      if (index > 0) {
+        // Go back to the previous tab
+        setIndex(index - 1);
+        return true; // Prevent the default back behavior
+      } else {
+        // If it's the first tab, allow the app to exit
+        ToastAndroid.show('Press back again to exit', ToastAndroid.SHORT);
+        return false; // Exit the app
       }
     };
 
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
     return () => {
-      asyncEffect()
+      backHandler.remove();
+    };
+  }, [index]);
+
+  useEffect(() => {
+    // Define the async function
+    const asyncEffect = async () => {
+      try {
+        if (selectionControl.getSelectionStatus.active) {
+          await selectionControl.turnOffSelection();
+        }
+      } catch (error) {}
+    };
+
+    return () => {
+      asyncEffect();
     };
   }, [routes[index]?.key]);
-
-  
-
 
   const renderTabBar = props => {
     return (
@@ -119,7 +139,7 @@ const MainNavigation = observer(() => {
             const onPress = () => setIndex(i);
 
             return (
-              <View key={i} style={styles.tabItem} onLayout={event => onTabLayout(i, event.nativeEvent.layout.width)} >
+              <View key={i} style={styles.tabItem} onLayout={event => onTabLayout(i, event.nativeEvent.layout.width)}>
                 <CustomTabBarLabel focused={focused} onPress={onPress}>
                   {route.title}
                 </CustomTabBarLabel>
@@ -147,7 +167,7 @@ const MainNavigation = observer(() => {
   };
 
   return (
-    <SafeAreaView style={[styles.screen, {backgroundColor:currentTheme.background}]}>
+    <SafeAreaView style={[styles.screen, { backgroundColor: currentTheme.background }]}>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -164,10 +184,9 @@ const MainNavigation = observer(() => {
 });
 
 const styles = StyleSheet.create({
-  screen:{
-    flex:1
+  screen: {
+    flex: 1,
   },
-  
   tabBarContainer: {
     overflow: 'hidden',
     position: 'absolute',
@@ -176,7 +195,6 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 1,
   },
-
   tabBarScrollContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',

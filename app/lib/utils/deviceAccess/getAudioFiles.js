@@ -51,11 +51,11 @@ export const getAudioFiles = async () => {
             }
 
             // Update the playlist
-            playlistStore.addPlaylist({playlistName, tracks, category});
+            playlistStore.createPlaylist({playlistName, tracks, category});
             console.log('Playlist updated with new tracks');
         } else {
             // Add a new playlist
-            playlistStore.addPlaylist({playlistName, tracks, category});
+            playlistStore.createPlaylist({playlistName, tracks, category});
         }
 
     } catch (error) {

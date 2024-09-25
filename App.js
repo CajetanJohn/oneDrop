@@ -8,6 +8,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
 import MainNavigation from './app/screens/main/navigation';
 import { getAudioFiles } from './app/lib/utils/deviceAccess/getAudioFiles';
+import Splash from './app/screens/Splash';
+import Loading from './app/screens/Loading';
+import AuthStack from './app/screens/auth/navigation';
+import SplashScreen from './app/screens/Loading';
 
 const App = () => {
   useEffect(() => {
@@ -22,10 +26,13 @@ const App = () => {
               <NavigationContainer>
                 <StatusBar
                   backgroundColor="transparent"
-                  barStyle="dark-content" // This sets the content color to a lighter shade
+                  barStyle="dark-content"
                   translucent={true}
                 />
+                {/*<SplashScreen/>*/}
+                {/*<AuthStack/>*/}
                 <MainNavigation />
+                {/*<Loading/>*/}
               </NavigationContainer>
             </SafeAreaProvider>
           </ThemeProvider>

@@ -7,11 +7,11 @@ import { useTheme } from '../../lib/utils/SetTheme';
 export const RadioButton = observer(({ isSelected, onPress, size = 20 }) => {
     const { currentTheme } = useTheme();
     return (
-      <TouchableOpacity onPress={onPress} style={styles.radioContainer}>
+      <TouchableOpacity onPress={onPress} style={[styles.radioContainer, {height: size, width: size, borderColor:currentTheme.textColor}]}>
         <View
           style={[
             styles.radioButton,
-            { borderColor: currentTheme.textColor, height: size, width: size },
+            { borderColor: currentTheme.textColor, height: size - 9, width: size - 9 },
             isSelected && {
               backgroundColor: currentTheme.textColor,
               borderColor: currentTheme.textColor,
@@ -29,11 +29,13 @@ export const RadioButton = observer(({ isSelected, onPress, size = 20 }) => {
         height: 24,
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 50,
+        borderWidth: 2,
+
+
       },
       radioButton: {
         borderRadius: 50,
-        borderWidth: 2,
-        backgroundColor: 'transparent',
       },
   })
   

@@ -27,10 +27,14 @@ import SelectionOptions, { AddToPlaylist } from '../SelectionOptions';
 const PlaylistDetails = observer(({ playlistId, onClose }) => {
 
     const activity = {
-        activityType:ACTIVITY_TYPE.SELECTING_AUDIO_FILES_IN_A_CUSTOM_PLAYLIST,
+        selectionActivity:ACTIVITY_TYPE.SELECTING_AUDIO_FILES_IN_A_CUSTOM_PLAYLIST,
         status:"onLongPress",
         active:false,
       };
+
+
+      //console.log(selectionControl.getSelectionData?.itemsSelected.length);
+      
 
     
     const { currentTheme } = useTheme();
@@ -80,8 +84,9 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
 
     return (
         <View style={styles.container}>
-            <Animated.View style={[styles.animatedView, { height: containerHeight, backgroundColor: currentTheme.background }]}>
-                <View style={[styles.header, { backgroundColor: "transparent" }]}>
+            <Animated.View style={[styles.animatedView, { height: containerHeight, backgroundColor: 'green' }]}>
+                <View style={[styles.header, { backgroundColor: "red" }]}>
+
                     <View style={styles.headerTextLeft}>
                         <TouchableOpacity onPress={onClose}>
                             <MaterialIcons name="chevron-left" size={40} color={currentTheme.iconColor} />
@@ -97,8 +102,10 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
                     </View>
 
                     <View style={styles.headerTextRight}>
-                        {selectionControl.getSelectionStatus?.active 
-                        && selectionControl.getSelectionStatus.activityType === activity.activityType? (
+                        {
+                        selectionControl.getSelectionStatus?.active 
+                        && selectionControl.getSelectionStatus.selectionActivity === activity.selectionActivity
+                        ? (
                             <SelectionOptions/>
                         ) : (
                             <>
@@ -107,6 +114,7 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
                             </>
                         )}
                     </View>
+
                 </View>
 
                 <Animated.View style={[styles.iconedView, { transform: [{ translateY: iconedViewTranslateY }], backgroundColor: "transparent" }]}>
@@ -157,7 +165,7 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
     },
     animatedView: {
       flexDirection: 'column',

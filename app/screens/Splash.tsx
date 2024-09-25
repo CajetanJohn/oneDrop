@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, BackHandler, Alert } from 'react-native';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
+import { ToolTip } from '../components/Tooltip';
 
 export default function Splash() {
   useEffect(() => {
@@ -31,9 +32,11 @@ export default function Splash() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.screen} >
+    <SafeAreaView style={[styles.screen, {backgroundColor:'red'}]} >
       <View style={styles.container}>
-        <Text>Splash</Text>
+        <ToolTip>
+          <Text>Hello</Text>
+        </ToolTip>
       </View>
     </SafeAreaView>
   )

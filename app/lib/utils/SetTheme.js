@@ -6,27 +6,32 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState('dark');
-  const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme()); // To keep track of system theme
-
+  const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme()); 
+  
   
   useEffect(() => {
     if (theme === 'system') {
       setTheme(colorScheme === 'dark' ? 'dark' : 'light');
     }
-  }, [theme, colorScheme]); // Depend on both theme and colorScheme
+  }, [theme, colorScheme]); 
 
-  // Detect system theme changes and update the theme accordingly
+
+  
+
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+    Appearance.addChangeListener(({ colorScheme }) => {
+  console.log(colorScheme);
+
+
+      
       setColorScheme(colorScheme);
       if (theme === 'system') {
         setTheme(colorScheme === 'dark' ? 'dark' : 'light');
       }
     });
 
-    // Clean up subscription on unmount
-    return () => subscription.remove();
-  }, [theme, Appearance]);
+    
+  }, [theme, colorScheme]);
 
   // Log theme changes
   useEffect(() => {

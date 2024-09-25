@@ -47,9 +47,7 @@ const EdgeIcon = observer(({onClose})=>{
               <Text>Done</Text>
             </Pressable>
             ) : (
-            <Pressable onPress={()=>onClose()}>
-              <CloseIcon color={currentTheme.iconColor} size={29}/>
-            </Pressable>
+           null
             )}
         </View>
     )
@@ -124,7 +122,8 @@ const styles = StyleSheet.create({
       fontSize: 16,
     },
     doneButton:{
-      backgroundColor:"blue"
+      backgroundColor:"blue",
+      padding:5
     }
   });
 

@@ -38,11 +38,11 @@ const CustomPlaylistItem = observer(({ item, onClick }) => {
   const itemType = "playlist";
   const activity = {
     active:true,
-    activityType:ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS,
+    selectionActivity:ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS,
   }
 
 
-  const selected = selectionControl.isItemSelected(item.id, activity.activityType);
+  const selected = selectionControl.isItemSelected(item.id, activity.selectionActivity);
  
  
   const onPress = useCallback(()=>{
@@ -59,7 +59,7 @@ const CustomPlaylistItem = observer(({ item, onClick }) => {
   const onLongPress = useCallback(() => {
     if (!selectionControl.getSelectionStatus.active) {
       const newStatus = {
-        activityType: activity.activityType,
+        selectionActivity: activity.selectionActivity,
         srcId:'',
       };
       selectionControl.setActivity(newStatus);      

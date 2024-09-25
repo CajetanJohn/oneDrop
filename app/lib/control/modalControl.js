@@ -1,5 +1,5 @@
 import { ACTIVITY_TYPE, MODAL_TYPE } from "../constants/Variables";
-import { makeAutoObservable, runInAction, action, reaction, computed } from 'mobx';
+import { makeAutoObservable, runInAction, action, computed } from 'mobx';
 import playlistStore from '../store/playlistStore';
 import selectionControl from "./SelectionControl";
 
@@ -76,7 +76,7 @@ class ModalStore {
         this.modal[modalType].playlistId = this.modal[MODAL_TYPE.VIEWING_PLAYLIST_DETAILS].playlistId
         const newStatus = {
           srcId: "111",
-          activityType: ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO,
+          selectionActivity: ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO,
         };
         selectionControl.setActivity(newStatus);
         break;
@@ -91,22 +91,26 @@ class ModalStore {
   }
 
 
-  closeCurrentModal() {
+  async closeCurrentModal() {
+    const modalStackLength = this.modal.modalStack.length;
 
-    if (this.modal.modalStack.length > 0) {
-      const previousModalType = this.modal.modalStack.pop();
-      this.modal.modalType = previousModalType;
-      this.modal.isOpen = true;
-      return;
+    if(modalStackLength <= 1 ){
+      await this.closeAllModals();
+      return
+    }
 
-    } else {
-      this.closeAllModals();
+    else{
+      this.modal.modalStack.pop();
+      this.modal.modalType = this.modal.modalStack.pop();
+      
     }
   }
   
 
   async closeAllModals() {
     runInAction(() => {
+
+      this.modal[this.modal.modalType].playlistId = '';
       this.modal.modalStack = [];
       this.modal.isOpen = false;
       this.modal.modalType = '';
@@ -137,21 +141,9 @@ class ModalStore {
 
   async calculateAndSetPlaylistName() {
 
-    const customPlaylists = playlistStore.getAllPlaylistsByCategory('custom');
-    const customPlaylistNames = customPlaylists
-      .map(playlist => playlist.playlistName)
-      .filter(name => /^Playlist_\d{3}$/.test(name))
-      .sort();
-
-
-    let nextPlaylistName = 'Playlist_001';
-    if (customPlaylistNames.length > 0) {
-      const highestNumber = Math.max(...customPlaylistNames.map(name => parseInt(name.split('_')[1], 10)));
-      nextPlaylistName = `Playlist_${String(highestNumber + 1).padStart(3, '0')}`;
-    }
 
     runInAction(() => {
-      this.modal[MODAL_TYPE.CREATING_A_NEW_PLAYLIST].playlistName = nextPlaylistName;
+      this.modal[MODAL_TYPE.CREATING_A_NEW_PLAYLIST].playlistName = 'nextPlaylistName';
     });
   }
 

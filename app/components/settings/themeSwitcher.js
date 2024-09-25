@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Switch, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Pressable, TouchableOpacity } from 'react-native';
 import { useTheme } from '../../lib/utils/SetTheme';
+import { RadioButton } from '../inputs/RadioButton';
 
 
 
@@ -8,57 +9,47 @@ import { useTheme } from '../../lib/utils/SetTheme';
 const ThemeSwitcher = () => {
   const { theme, setTheme, currentTheme } = useTheme();
 
-  const handleSwitchChange = (newTheme) => {
-    setTheme(newTheme);
-  };
 
   return (
-    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
-      <Text style={styles.switchLabel}>Select Theme:</Text>
-      <View style={styles.switchRow}>
-        <Switch
-          value={theme === 'light'}
-          onValueChange={(value) => value && handleSwitchChange('light')}
-        />
-        <Text>Light</Text>
+    <View style={styles.themeContainer}>
+        <Text style={{color:currentTheme.textColor}}>Theme</Text>
+        <View style={[styles.switchContainer, {backgroundColor:currentTheme.tertiaryBackground, borderColor:currentTheme.fadedText}]}>
+
+          <TouchableOpacity style={[styles.theme,{borderBottomWidth:1, borderColor:currentTheme.fadedText}]} onPress={()=>{setTheme('system')}}>
+            <Text style={[styles.themeText, {color:currentTheme.textColor}]}>Automatic</Text>
+            <RadioButton isSelected={theme === 'system'} onPress={()=>{setTheme('system')}}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.theme,{borderBottomWidth:1, borderColor:currentTheme.fadedText}]} onPress={()=>{setTheme('light')}}>
+            <Text style={[styles.themeText, {color:currentTheme.textColor}]}>Light</Text>
+            <RadioButton isSelected={theme === 'light'} onPress={()=>{setTheme('light')}}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.theme} onPress={()=>{setTheme('dark')}}>
+            <Text style={[styles.themeText, {color:currentTheme.textColor}]}>Dark</Text>
+            <RadioButton isSelected={theme === 'dark'} onPress={()=>{setTheme('dark')}}/>
+          </TouchableOpacity>
+          
+        </View>
       </View>
-      <View style={styles.switchRow}>
-        <Switch
-          value={theme === 'dark'}
-          onValueChange={(value) => value && handleSwitchChange('dark')}
-        />
-        <Text>Dark</Text>
-      </View>
-      <View style={styles.switchRow}>
-        <Switch
-          value={theme === 'custom'}
-          onValueChange={(value) => value && handleSwitchChange('custom')}
-        />
-        <Text>Custom</Text>
-      </View>
-      <View style={styles.switchRow}>
-        <Switch
-          value={theme === 'system'}
-          onValueChange={(value) => value && handleSwitchChange('system')}
-        />
-        <Text>System Default</Text>
-      </View>
-    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  switchContainer: {
-    padding: 20,
+  themeContainer:{
+    gap:15
   },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10,
+  switchContainer:{
+    borderWidth:1,
+    borderColor:'red',
+    borderRadius:10,
+    overflow:'hidden',
+    padding:10,
+    gap:2,
   },
-  switchLabel: {
-    fontSize: 18,
-    marginBottom: 10,
+  theme : {
+    flexDirection:'row',
+    justifyContent:'space-between',
+    paddingVertical:8,
+    alignItems:'center'
   },
 });
 

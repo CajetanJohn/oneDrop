@@ -43,7 +43,7 @@ const themes = {
     background: '#000000',
     secondaryBackground:"#171717",
     tertiaryBackground:'#454545',
-    fadedText:"#454545",
+    fadedText:"#CCCCCE",
 
     tinyFont:13,
     smallFont:15,

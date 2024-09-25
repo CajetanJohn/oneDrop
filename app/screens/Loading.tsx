@@ -1,27 +1,28 @@
-// LoadingScreen.tsx
+// SplashScreen.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { observer } from 'mobx-react';
 
-const Loading = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Loading...</Text>
-    </View>
-  );
-};
+const SplashScreen = observer(() => {
+  return null
+});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff', // Use a background color to match the theme if needed
+    backgroundColor: '#f5f5f5',
   },
-  text: {
+  header: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#000', // Use a text color to match the theme if needed
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 18,
+    marginVertical: 5,
   },
 });
 
-export default Loading;
+export default SplashScreen;

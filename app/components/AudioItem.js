@@ -29,7 +29,7 @@ const EdgeIcon = observer(({ audio, selectionMode, isSelected, onPress }) => {
       {selectionMode ? (
         <RadioButton isSelected={isSelected} onPress={()=>onPress(audio)} />
       ) : (
-        <TouchableOpacity ref={audioItemMenuRef} onPress={togglePopover}>
+        <TouchableOpacity ref={audioItemMenuRef} onPress={togglePopover} style={styles.edgeIcon}>
           <Menu color={currentTheme.iconColor} />
         </TouchableOpacity>
       )}
@@ -42,29 +42,29 @@ const EdgeIcon = observer(({ audio, selectionMode, isSelected, onPress }) => {
 
 const AudioItem = observer(({ audio, index, playlistId, activity }) => {
   const { currentTheme } = useTheme();
-  const {getSelectionStatus, } = selectionControl;
 
 
-  const selected = selectionControl.isItemSelected(audio.id, activity.activityType); 
+
+  const selected = selectionControl.isItemSelected(audio.id, activity.selectionActivity); 
   
 
   const onPress = useCallback(() => {
-    if (selectionControl.getSelectionStatus?.active && selectionControl.getSelectionStatus.activityType === activity.activityType) {
-      selectionControl.selectItem(audio.id, activity.activityType);
+    if (selectionControl.getSelectionStatus?.active && selectionControl.getSelectionStatus.selectionActivity === activity.selectionActivity) {
+      selectionControl.selectItem(audio.id, activity.selectionActivity);
     } else {
       console.log(audio);
     }
-  }, [audio.id, activity.activityType]);
+  }, [audio.id, activity.selectionActivity]);
   
   const switchSelectionMode = useCallback(() => {
     const newStatus = {
       srcId: playlistId,
-      activityType: activity.activityType,
+      selectionActivity: activity.selectionActivity,
     };
 
     selectionControl.setActivity(newStatus);
     onPress();
-  }, [audio.id, activity.activityType, playlistId]);
+  }, [audio.id, activity.selectionActivity, playlistId]);
 
   // Memoize the JSX output
   const renderedItem = (
@@ -77,31 +77,36 @@ const AudioItem = observer(({ audio, index, playlistId, activity }) => {
       onPress={onPress}
     >
       <View style={[styles.iconContainer, { backgroundColor: currentTheme.tertiaryBackground }]}>
-        <MusicNoteIcon color={currentTheme.secondaryIconColor} size={25} />
+        <MusicNoteIcon color={currentTheme.secondaryIconColor} size={22} />
       </View>
 
-      <View style={styles.textContainer}>
-        <Text
-          style={{ color: currentTheme.textColor, fontSize: currentTheme.smallFont, overflow: 'hidden' }}
-          numberOfLines={1}
-          ellipsizeMode="tail"
-        >
-          {audio.title || audio.filename}
-        </Text>
-        <Text style={{ color: currentTheme.textColor, fontSize: currentTheme.tinyFont }}>
-          Unknown artist
-        </Text>
-        <View style={[styles.border, { backgroundColor: currentTheme.fadedText }]} />
-      </View>
+      <View style={[styles.container, {borderBottomColor:currentTheme.fadedText}]}>
 
-      <View style={styles.radioContainer}>
+
+        <View style={styles.textContainer}>
+          <Text
+            style={{ color: currentTheme.textColor, fontSize: currentTheme.smallFont, overflow: 'hidden' }}
+            numberOfLines={1} ellipsizeMode="tail" >
+
+            {audio.title || audio.filename}
+          </Text>
+
+          <Text style={{ color: currentTheme.textColor, fontSize: currentTheme.tinyFont }}>
+            Unknown artist
+          </Text>
+
+
+        </View>
+
         <EdgeIcon
-          onPress={onPress}
-          audio={audio}
-          isSelected={selected}
-          selectionMode={selectionControl.getSelectionStatus?.active && selectionControl.getSelectionStatus.activityType === activity.activityType}
-        />
+            onPress={onPress}
+            audio={audio}
+            isSelected={selected}
+            selectionMode={selectionControl.getSelectionStatus?.active && selectionControl.getSelectionStatus.selectionActivity === activity.selectionActivity} />
+
+
       </View>
+
     </TouchableOpacity>
   );
 
@@ -111,10 +116,6 @@ const AudioItem = observer(({ audio, index, playlistId, activity }) => {
 
 
 const styles = StyleSheet.create({
-  container: {
-    
-    backgroundColor:"blue"
-  },
   itemContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -128,37 +129,25 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 15,
+  },
+  container: {
+    flexDirection: 'row',
+    flex: 1,
+    borderBottomWidth:1,
+    paddingBottom:8,
+    alignItems:'center'
   },
   textContainer: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    gap: 5,
+    flexDirection:"column",
     flex: 1,
+    gap: 5,
+    justifyContent: 'center',        
   },
-  border: {
-    height: 1,
+  edgeIcon: {
+    
   },
   
-  popoverStyle: {
-    borderRadius: 15,
-    borderWidth: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  transparentBackground: {
-    backgroundColor: 'transparent',
-  },
-  popoverContent: {
-    padding: 10,
-  },
-  popoverItem: {
-    fontSize: 16,
-    padding: 10,
-  },
 });
 
 export default AudioItem;

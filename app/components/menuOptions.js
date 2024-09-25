@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { View, Pressable, StyleSheet, Text,Animated, TouchableOpacity } from 'react-native';
+import { View, Pressable, StyleSheet, Text, Animated, TouchableOpacity } from 'react-native';
 import { useTheme } from '../lib/utils/SetTheme';
 import Menu from '../assets/icons/menu';
 import { ALL_SAVED_PLAYLIST_SCREEN, CREATE_PLAYLIST } from '@env';

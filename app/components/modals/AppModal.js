@@ -14,6 +14,15 @@ const AppModal = observer(() => {
   const { currentTheme } = useTheme();
   const [backPressHandled, setBackPressHandled] = useState(false);
 
+  useEffect(() => {
+    console.log('modalStack:', modalStore.modal.modalStack);
+    
+    console.log('current modalType:', modalStore.modal.modalType);
+    
+  
+  }, [modalStore.modal.modalType])
+  
+
   const child = () => {
     switch (status.modalType) {
       case MODAL_TYPE.CREATING_A_NEW_PLAYLIST:
@@ -48,7 +57,6 @@ const AppModal = observer(() => {
   }, [status?.isOpen, backPressHandled]); // Dependencies: handle back presses only when the modal is open
 
   const handleClose = () => {
-    console.log('Closing modal, current modalType:', modalStore.modal.modalType);
     modalStore.closeCurrentModal();
     setBackPressHandled(false); // Reset the flag after the close
   };
@@ -58,7 +66,7 @@ const AppModal = observer(() => {
       transparent={true}
       animationType="slide"
       visible={status?.isOpen}
-      onRequestClose={handleClose}  // Handle Android back button
+      onRequestClose={handleClose}
       statusBarTranslucent={true}
     >
       <SafeAreaView style={[{ backgroundColor: currentTheme.background, flex: 1 }]}>

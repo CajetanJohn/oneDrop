@@ -52,11 +52,8 @@ export const AddToPlaylist = observer(() => {
   const addToPlaylistRef = useRef(null);
 
   let isShown =( selectionControl.getSelectionData?.itemsSelected?.length > 0 &&
-  selectionControl.getSelectionStatus?.activityType === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO
+  selectionControl.getSelectionStatus?.selectionActivity === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO
 )
-
-console.log(selectionControl.getSelectionStatus?.activityType);
-
 
   if(!isShown){
     return null
@@ -99,16 +96,25 @@ export const TrashSelectedIcon = () => {
 
   const logSelectedTracks = () => {
 
-    if(selectionControl.getSelectionStatus.activityType === ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS){
+    if(selectionControl.getSelectionStatus.selectionActivity === ACTIVITY_TYPE.SELECTING_CUSTOM_PLAYLISTS){
       playlistStore.deletePlaylist(selectionControl.getSelectionData?.itemsSelected)
     }
-    else if(selectionControl.getSelectionStatus.activityType === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO){
+
+    else if(selectionControl.getSelectionStatus.selectionActivity === ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO){
       playlistStore.deleteTrackFromPlaylist(
         "111",
         selectionControl.getSelectionData?.itemsSelected
       )
     }
-    
+
+    else if(selectionControl.getSelectionStatus.selectionActivity === ACTIVITY_TYPE.SELECTING_AUDIO_FILES_IN_A_CUSTOM_PLAYLIST){
+      playlistStore.deleteTrackFromPlaylist(
+        modalStore.modal[modalStore.getModalData.modalType].playlistId,
+        selectionControl.getSelectionData?.itemsSelected
+      )
+    }
+
+    selectionControl.clearSelection();
   };
 
   return (

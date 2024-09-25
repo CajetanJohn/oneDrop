@@ -10,7 +10,7 @@ import { ACTIVITY_TYPE } from '../../lib/constants/Variables';
 
 
 const activity = {
-  activityType:ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO,
+  selectionActivity:ACTIVITY_TYPE.SELECTING_DEVICE_AUDIO,
   status:"onLongPress",
   active:false,
 };
