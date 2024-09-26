@@ -1,54 +1,79 @@
-import { StyleSheet, Text, View, BackHandler, Alert } from 'react-native';
-import React, { useEffect } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
-import { ToolTip } from '../components/Tooltip';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import AnimatedPressable from '../components/AnimatedPressable';
+import { useTheme } from '../lib/utils/SetTheme';
 
-export default function Splash() {
-  useEffect(() => {
-    // Set navigation bar to transparent
-    SystemNavigationBar.setNavigationColor('#FF0000');
+import AddIcon from '../assets/icons/AddIcon';
+import CheckIcon from '../assets/icons/CheckIcon';
+import CloseIcon from '../assets/icons/CloseIcon';
+import HeartIcon from '../assets/icons/HeartIcon';
+import LeftArrowIcon from '../assets/icons/LeftArrowIcon';
+import MusicNoteIcon from '../assets/icons/MusicNoteIcon';
+import RightArrowIcon from '../assets/icons/RightArrowIcon';
+import SearchIcon from '../assets/icons/SearchIcon';
+import ShareIcon from '../assets/icons/ShareIcon';
+import SortIcon from '../assets/icons/SortIcon';
+import TrashIcon from '../assets/icons/TrashIcon';
+import ShuffleIcon from '../assets/icons/ShuffleIcon';
+import HeartCheckedIcon from '../assets/icons/HeartCheckedIcon';
 
-    const backAction = () => {
-      Alert.alert("Hold on!", "Are you sure you want to go back?", [
-        {
-          text: "Cancel",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "YES", onPress: () => BackHandler.exitApp() }
-      ]);
-      return true;
-    };
+const Splash = () => {
+  const handlePress = () => {
+    console.log("Splash pressed!");
+    // You can add navigation or other functionality here
+  };
 
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+  // Define the theme object with iconColor
+  const {currentTheme} = useTheme()
 
-    return () => {
-      backHandler.remove(); // Cleanup the event listener
-    };
-  }, []);
+  // Create an array of all icons for easy rendering
+  const icons = [
+    AddIcon,
+    CheckIcon,
+    CloseIcon,
+    HeartIcon,
+    LeftArrowIcon,
+    MusicNoteIcon,
+    RightArrowIcon,
+    SearchIcon,
+    ShareIcon,
+    ShuffleIcon,
+    SortIcon,
+    TrashIcon,
+    HeartCheckedIcon
+  ];
 
   return (
-    <SafeAreaView style={[styles.screen, {backgroundColor:'red'}]} >
-      <View style={styles.container}>
-        <ToolTip>
-          <Text>Hello</Text>
-        </ToolTip>
+    <View style={styles.splashContainer}>
+      {/* Row Container for Icons */}
+      <View style={styles.iconRow}>
+        {icons.map((IconComponent, index) => (
+          <IconComponent
+            key={index}
+            color={currentTheme.iconColor}
+            style={styles.icon} // Add spacing between icons if necessary
+          />
+        ))}
       </View>
-    </SafeAreaView>
-  )
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-  screen: {
+  splashContainer: {
     flex: 1,
-    backgroundColor: "blue"
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#333', // Set background color for contrast
   },
-  container: {
-    flex: 1,
-    backgroundColor: "red"
-  }
+  iconRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    marginHorizontal: 5, // Spacing between icons
+  },
 });
+
+export default Splash;

@@ -33,7 +33,7 @@ const PlaylistName = observer(({ onClose }) => {
               })
             return;
         }
-        playlistStore.createPlaylist(modalStore.getPlaylistName.trim(), tracks);
+        playlistStore.addPlaylist(modalStore.getPlaylistName.trim(), tracks);
         onClose();
     };
 

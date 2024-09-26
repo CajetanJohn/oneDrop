@@ -12,7 +12,7 @@ import AddToFavoritesButton from '../interaction/AddToFavoritesButton';
 
 
 
-const headerHeight = 110;
+const headerHeight = 90;
 const iconedViewHeight = 280;
 
 
@@ -55,7 +55,7 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
 
     const iconedViewTranslateY = scrollY.interpolate({
         inputRange: [0, iconedViewHeight + iconedViewHeight],
-        outputRange: [0, -iconedViewHeight],
+        outputRange: [0, -iconedViewHeight - iconedViewHeight],
         extrapolate: 'clamp',
     });
 
@@ -84,8 +84,8 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
 
     return (
         <View style={styles.container}>
-            <Animated.View style={[styles.animatedView, { height: containerHeight, backgroundColor: 'green' }]}>
-                <View style={[styles.header, { backgroundColor: "red" }]}>
+            <Animated.View style={[styles.animatedView, { height: containerHeight, backgroundColor: currentTheme.background }]}>
+                <View style={[styles.header, { backgroundColor: 'transparent'}]}>
 
                     <View style={styles.headerTextLeft}>
                         <TouchableOpacity onPress={onClose}>
@@ -117,7 +117,7 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
 
                 </View>
 
-                <Animated.View style={[styles.iconedView, { transform: [{ translateY: iconedViewTranslateY }], backgroundColor: "transparent" }]}>
+                <Animated.View style={[styles.iconedView, { transform: [{ translateY: iconedViewTranslateY }], backgroundColor: 'transparent' }]}>
                     <Animated.View style={[styles.iconContainer, { backgroundColor: currentTheme.tertiaryBackground, opacity: iconedViewOpacity }]}>
                         <MusicNoteIcon size={70} color={currentTheme.iconColor} />
                     </Animated.View>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
       elevation: 1005,
       zIndex: 1005,
       gap: 0,
-      paddingTop: 0,
+      top:0
     },
     listContainer: {
         flex:1,
@@ -186,10 +186,11 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       paddingHorizontal: 15,
-      top: 20,
+      top: 0,
       width: "100%",
       elevation: 1005,
       zIndex: 1005,
+      paddingTop:8
     },
     headerTextLeft: {
       flexDirection: "row",
@@ -214,13 +215,13 @@ const styles = StyleSheet.create({
     iconedView: {
       alignItems: 'center',
       justifyContent: 'center',
-      height: iconedViewHeight,
+      height: iconedViewHeight + headerHeight,
       position: "absolute",
       width: "100%",
-      bottom: 0,
       elevation: 1002,
       zIndex: 1002,
-      gap:10
+      gap:10,
+      top:0
     },
     iconContainer: {
       width: 130,

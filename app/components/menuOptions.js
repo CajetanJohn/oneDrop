@@ -7,9 +7,12 @@ import SearchIcon from '../assets/icons/SearchIcon';
 import selectionControl from '../lib/control/SelectionControl';
 import AddIcon from '../assets/icons/AddIcon';
 import { observer } from 'mobx-react-lite';
-import { Tooltip } from 'react-native-elements';
 import modalStore from '../lib/control/modalControl';
 import { MODAL_TYPE } from '../lib/constants/Variables';
+import AnimatedPressable from './AnimatedPressable';
+import CustomPopover from './PopOver';
+
+
 
 export const CreatePlaylistButton = observer(({currentPage})=>{
   const createPlaylitsTRef = useRef(null);
@@ -26,9 +29,9 @@ if (currentPage !== ALL_SAVED_PLAYLIST_SCREEN ) return null;
   }
 
   return(
-    <Pressable onPress={onPress} ref={createPlaylitsTRef} style={styles.icon}>
-          <AddIcon size={21} color={currentTheme.iconColor} />
-    </Pressable>
+    <AnimatedPressable onPress={onPress} ref={createPlaylitsTRef} style={styles.icon}>
+      <AddIcon size={21} color={currentTheme.iconColor} />
+    </AnimatedPressable>
   )
 })
 
@@ -40,9 +43,9 @@ export const SearchButton = () => {
     };
   
     return (
-      <Pressable onPress={handleSearchPress} style={styles.icon}>
+      <AnimatedPressable onPress={handleSearchPress} style={styles.icon}>
         <SearchIcon size={22} color={currentTheme.iconColor} />
-      </Pressable>
+      </AnimatedPressable>
     );
   };
 
@@ -50,74 +53,32 @@ export const SearchButton = () => {
   
   export const MenuButton = () => {
     const { currentTheme } = useTheme();
-    const [scaleAnim] = useState(new Animated.Value(0));
-    const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+    const [isPopoverVisible, setPopoverVisible] = useState(false);
+    const MenuRef = useRef(null);
   
-    const handleOpenTooltip = () => {
-      setIsTooltipVisible(true);
+    const options = [
+      { title: 'Profile', onPress: () => { console.log('profile'); } },
+      { title: 'Sound and Effects', onPress: () => { console.log('sound and effects'); } },
+      { title: 'Settings', onPress: () => { console.log('settings'); } },
+    ];
   
-      scaleAnim.setValue(0);
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+    const togglePopover = () => {
+      setPopoverVisible(prev => !prev);
     };
-  
-    const handleCloseTooltip = () => {
-      Animated.timing(scaleAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => setIsTooltipVisible(false));
-    };
-  
+   
     return (
-      <View style={styles.toolTipContainer}>
-        <Tooltip
-          popover={
-            isTooltipVisible && (
-              <Animated.View
-                style={[
-                  styles.tooltipContent,
-                  {
-                    transform: [{ scale: scaleAnim }],
-                    transformOrigin: 'top right',
-                    backgroundColor: currentTheme.tertiaryBackground
-                  },
-                ]}
-              >
-                <Pressable onPress={() => console.log('Settings clicked')} style={styles.option}>
-                  <Text style={styles.optionText}>Settings</Text>
-                </Pressable>
-                <Pressable onPress={() => console.log('Sound & Effects clicked')} style={styles.option}>
-                  <Text style={styles.optionText}>Sound & Effects</Text>
-                </Pressable>
-                <Pressable onPress={() => console.log('Profile clicked')} style={styles.option}>
-                  <Text style={styles.optionText}>Profile</Text>
-                </Pressable>
-                {/* Button to close tooltip */}
-                <Pressable onPress={handleCloseTooltip} style={styles.option}>
-                  <Text style={styles.optionText}>Close</Text>
-                </Pressable>
-              </Animated.View>
-            )
-          }
-          backgroundColor="transparent"
-          height={150}
-          width={300}
-          withPointer={false}
-          placement="auto"
-          onOpen={handleOpenTooltip}
-          containerStyle={{ position: 'absolute', top:20 }}
-          overlayColor='transparent'
-        >
-          
-          <View>
-            <Menu color={currentTheme.iconColor} size={24} />
-          </View>
-        </Tooltip>
-      </View>
+      <>
+        <AnimatedPressable  onPress={togglePopover}>
+          <Text style={{width:0, height:0}} ref={MenuRef}>{null}</Text>
+          <Menu color={currentTheme.iconColor} />
+        </AnimatedPressable>
+
+        <CustomPopover
+          options={options}
+          ref={MenuRef} 
+          isVisible={isPopoverVisible} 
+          onClose={() => setPopoverVisible(false)} />
+      </>
     );
   };
   
@@ -143,11 +104,7 @@ export default function MenuOptions({currentPage}){
       alignItems: 'center',
       justifyContent: 'space-between',
       height: 50,
-      gap:5,
-    },
-    icon: {
-      padding: 10,
-      borderRadius: 50,
+      gap:10,
     },
     option: {
       padding: 10,

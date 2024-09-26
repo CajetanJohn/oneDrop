@@ -74,7 +74,7 @@ const LoginScreen = observer(() => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: "#f5e7d2", // Adjusted to a light cream background similar to the image
+    backgroundColor: "#f5e7d2",
     flex: 1,
     justifyContent: "center",
   },

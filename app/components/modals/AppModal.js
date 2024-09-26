@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, BackHandler, SafeAreaView, StyleSheet } from 'react-native';
+import { Modal, BackHandler, SafeAreaView, StyleSheet, View } from 'react-native';
 import { observer } from 'mobx-react';
 import PlaylistDetails from './PlaylistDetails';
 import PlaylistName from './PlaylistName';
@@ -8,20 +8,20 @@ import SelectPlaylist from './SelectPlaylist';
 import { useTheme } from '../../lib/utils/SetTheme';
 import { MODAL_TYPE } from '../../lib/constants/Variables';
 import modalStore from '../../lib/control/modalControl';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const AppModal = observer(() => {
   const status = modalStore.getModalData;
   const { currentTheme } = useTheme();
   const [backPressHandled, setBackPressHandled] = useState(false);
 
+  // Get the safe area insets for top, bottom, left, right
+  const insets = useSafeAreaInsets();
+
   useEffect(() => {
     console.log('modalStack:', modalStore.modal.modalStack);
-    
     console.log('current modalType:', modalStore.modal.modalType);
-    
-  
-  }, [modalStore.modal.modalType])
-  
+  }, [modalStore.modal.modalType]);
 
   const child = () => {
     switch (status.modalType) {
@@ -69,9 +69,17 @@ const AppModal = observer(() => {
       onRequestClose={handleClose}
       statusBarTranslucent={true}
     >
-      <SafeAreaView style={[{ backgroundColor: currentTheme.background, flex: 1 }]}>
+      {/* Add padding using insets */}
+      <View style={{ 
+        flex: 1, 
+        backgroundColor: 'red',
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingLeft: insets.left,
+        paddingRight: insets.right,
+      }}>
         {child()}
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 });

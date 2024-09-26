@@ -3,11 +3,11 @@ import { TextInput, View, Text, StyleSheet } from "react-native";
 import CheckIcon from "../../assets/icons/CheckIcon";
 
 
-const FormInput = ({ label, value, error, onChangeText, placeholder, secureTextEntry = false, keyboardType }) => {
+const FormInput = ({ label = '', value, error = '', onChangeText, placeholder = '', secureTextEntry = false, keyboardType, ...props }) => {
   const isValid = value && !error;  // Determine if the input is valid (has a value and no error)
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={styles.inputContainer} >
       <Text style={styles.label}>{label}</Text>
       <View style={styles.inputWrapper}>
         <TextInput
@@ -27,6 +27,7 @@ const FormInput = ({ label, value, error, onChangeText, placeholder, secureTextE
 const styles = StyleSheet.create({
   inputContainer: {
     marginVertical: 3,
+    flex:1,
   },
   label: {
     marginBottom: 5,

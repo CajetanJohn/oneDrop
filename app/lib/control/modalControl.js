@@ -141,13 +141,23 @@ class ModalStore {
 
   async calculateAndSetPlaylistName() {
 
+    const customPlaylists = playlistStore.getAllPlaylistsByCategory('custom');
+    const customPlaylistNames = customPlaylists
+      .map(playlist => playlist.playlistName)
+      .filter(name => /^Playlist_\d{3}$/.test(name))
+      .sort();
+
+
+    let nextPlaylistName = 'Playlist_001';
+    if (customPlaylistNames.length > 0) {
+      const highestNumber = Math.max(...customPlaylistNames.map(name => parseInt(name.split('_')[1], 10)));
+      nextPlaylistName = `Playlist_${String(highestNumber + 1).padStart(3, '0')}`;
+    }
 
     runInAction(() => {
-      this.modal[MODAL_TYPE.CREATING_A_NEW_PLAYLIST].playlistName = 'nextPlaylistName';
+      this.modal[MODAL_TYPE.CREATING_A_NEW_PLAYLIST].playlistName = nextPlaylistName;
     });
   }
-
-
 
 }
 

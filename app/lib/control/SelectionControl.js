@@ -36,22 +36,25 @@ class SelectionControl {
     },
   };
 
+  search = {
+    active:false,
+    searchingFrom:'',
+    searchText:'',
+    sourceData:{
+      localData:['Local Song 1', 'Local Song 2', 'Local Song 3'],
+      onlineData:['Online Song 1', 'Online Song 2', 'Online Song 3'],
+    }
+  }
+
   constructor() {
     makeAutoObservable(this, {
       screenProps: observable,
       selection: observable,
-      setActivity: action,
-      turnOffSelection: action,
-      setHeaderHeight: action,
-      addToItems: action,
-      removeFromItems: action,
-      selectAllItems: action,
-      deselectAllItems: action,
       getActivityData: computed,
       getScreenProps: computed,
       getActivityStatus: computed,
       areAllItemsSelected: computed,
-      clearSelection: action,
+      filteredResults: computed,
     });
 
     reaction(
@@ -183,6 +186,28 @@ class SelectionControl {
   get getScreenProps() {
     return this.screenProps;
   }
+
+
+  setSearchText = (text) => {
+    this.search.searchText = text;
+  };
+
+  setSearchSource = (tab) => {
+    this.search.searchingFrom = tab;
+  };
+
+  get getSearchText (){
+    return this.search.searchText
+  }
+
+  get filteredResults() {
+    const dataToFilter =  this.search.searchingFrom === 'Local' ? this.search.sourceData.localData : this.search.sourceData.onlineData;
+    if(this.getSearchText.trim() === '') return null
+    return dataToFilter.filter((item) =>
+      item.toLowerCase().includes(this.getSearchText.toLowerCase())
+    );
+  }
+
 
   
 }

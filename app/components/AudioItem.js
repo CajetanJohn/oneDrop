@@ -8,17 +8,21 @@ import { observer } from 'mobx-react-lite';
 import { ACTIVITY_TYPE } from '../lib/constants/Variables';
 
 import { RadioButton } from './inputs/RadioButton';
+import CustomPopover from './PopOver';
+import AnimatedPressable from './AnimatedPressable';
 
-// Inline RadioButton component
 
-
-const EdgeIcon = observer(({ audio, selectionMode, isSelected, onPress }) => {
+const EdgeIcon = observer(({ audio, playlistId, selectionMode, isSelected, onPress }) => {
   const { currentTheme } = useTheme();
   const [isPopoverVisible, setPopoverVisible] = useState(false);
   const audioItemMenuRef = useRef(null);
 
-
-
+  const options = [
+    { title: 'Add', onPress: () => { console.log(audio, playlistId); } },
+    { title: 'Delete', onPress: () => { console.log(audio, playlistId); } },
+    { title: 'Share', onPress: () => { console.log(audio, playlistId); } },
+    { title: 'Details', onPress: () => { console.log(audio, playlistId); } }
+  ];
 
   const togglePopover = () => {
     setPopoverVisible(prev => !prev);
@@ -27,17 +31,23 @@ const EdgeIcon = observer(({ audio, selectionMode, isSelected, onPress }) => {
   return (
     <>
       {selectionMode ? (
-        <RadioButton isSelected={isSelected} onPress={()=>onPress(audio)} />
+        <RadioButton isSelected={isSelected} onPress={() => onPress(audio)} />
       ) : (
-        <TouchableOpacity ref={audioItemMenuRef} onPress={togglePopover} style={styles.edgeIcon}>
-          <Menu color={currentTheme.iconColor} />
-        </TouchableOpacity>
+        <AnimatedPressable  onPress={togglePopover} style={styles.edgeIcon}>
+          <Text style={{width:0, height:0}} ref={audioItemMenuRef}>{null}</Text>
+          <Menu color={currentTheme.fadedText} />
+        </AnimatedPressable>
       )}
 
+      <CustomPopover
+        options={options}
+        ref={audioItemMenuRef} // Pass the ref for positioning
+        isVisible={isPopoverVisible} // Control visibility
+        onClose={() => setPopoverVisible(false)} // Handle closing the popover
+      />
     </>
   );
-})
-
+});
 
 
 const AudioItem = observer(({ audio, index, playlistId, activity }) => {
@@ -101,6 +111,7 @@ const AudioItem = observer(({ audio, index, playlistId, activity }) => {
         <EdgeIcon
             onPress={onPress}
             audio={audio}
+            playlistId={playlistId}
             isSelected={selected}
             selectionMode={selectionControl.getSelectionStatus?.active && selectionControl.getSelectionStatus.selectionActivity === activity.selectionActivity} />
 

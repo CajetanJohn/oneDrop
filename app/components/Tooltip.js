@@ -1,100 +1,79 @@
-import { StyleSheet, Text, View, Pressable, Animated } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, Pressable, Animated } from 'react-native';
+import { Tooltip } from 'react-native-elements';
 import { useTheme } from '../lib/utils/SetTheme';
-import { Tooltip } from 'react-native-elements/dist/tooltip/Tooltip';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-const options =[
-  {title:'Add', onPress:()=>{console.log('added')}},
-  {title:'Delete', onPress:()=>{console.log('deleted')}},
-  {title:'Share', onPress:()=>{console.log('share')}},
-  {title:'Details', onPress:()=>{console.log('details')}}
-]
+const options = [
+  { title: 'Add', onPress: () => { console.log('added'); } },
+  { title: 'Delete', onPress: () => { console.log('deleted'); } },
+  { title: 'Share', onPress: () => { console.log('share'); } },
+  { title: 'Details', onPress: () => { console.log('details'); } }
+];
 
-export const ToolTip = ({isOpen = false, onClose, children}) => {
-    const { currentTheme } = useTheme();
-    const [isTooltipVisible, setIsTooltipVisible] = useState(isOpen);
-    const [scaleAnim] = useState(new Animated.Value(0));
+export const ToolTip = ({ isOpen = false, children }) => {
+  const { currentTheme } = useTheme();
+  const [isTooltipVisible, setIsTooltipVisible] = useState(isOpen);
+  const [scaleAnim] = useState(new Animated.Value(0));
 
-
-    const OpenTooltip = () => {
-      setIsTooltipVisible(true);
-  
-      scaleAnim.setValue(0);
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    };
-  
-    const CloseTooltip = () => {
-      Animated.timing(scaleAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start(() => setIsTooltipVisible(false));
-    };
-
-    useEffect(() => {
-        setIsTooltipVisible(isOpen)
-    }, [isOpen])
-    
-  
-    return (
-      
-      <SafeAreaView style={styles.toolTipContainer}>
-        <Tooltip
-          popover={
-              (true && 
-              <Animated.View
-                style={[
-                  styles.tooltipContent,
-                  {
-                    //transform: [{ scale: scaleAnim }],
-                    backgroundColor: "red"
-                  },
-                ]} >
-                  {options.map((option, index)=>(
-                    <Pressable key={index} onPress={option.onPress} style={styles.option}>
-                      <Text style={styles.optionText}>{option.title}</Text>
-                    </Pressable>
-                  ))}
-                              
-              </Animated.View>)
-          }
-          backgroundColor="transparent"
-          height={150}
-          width={300}
-          withPointer={false}
-          placement="auto"
-          onOpen={()=>{OpenTooltip}}
-          onClose={()=>{CloseTooltip}}
-          containerStyle={{ position: 'absolute'}}
-          overlayColor='transparent'
-                    
-        >
-          {children}
-        </Tooltip>
-      </SafeAreaView>
-    );
+  const openTooltip = () => {
+    setIsTooltipVisible(true);
+    scaleAnim.setValue(0);
+    Animated.timing(scaleAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   };
 
+  const closeTooltip = () => {
+    Animated.timing(scaleAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => setIsTooltipVisible(false));
+  };
+
+  useEffect(() => {
+    setIsTooltipVisible(isOpen);
+  }, [isOpen]);
+
+  return (
+    <Tooltip
+      popover={
+        <Animated.View style={[styles.tooltipContent, { backgroundColor: 'red' }]}>
+          {options.map((option, index) => (
+            <Pressable key={index} onPress={option.onPress} style={styles.option}>
+              <Text style={styles.optionText}>{option.title}</Text>
+            </Pressable>
+          ))}
+        </Animated.View>
+      }
+      backgroundColor="transparent"
+      height={150}
+      width={200} // Adjust width based on content size
+      withPointer={true} // Use the pointer to attach it to the trigger
+      placement="bottom" // Adjust based on preference ('top', 'left', etc.)
+      onOpen={() => openTooltip()}
+      onClose={() => closeTooltip()}
+      containerStyle={{}} // Remove absolute positioning
+      overlayColor="transparent"
+    >
+      {children}
+    </Tooltip>
+  );
+};
+
 const styles = StyleSheet.create({
-  toolTipContainer: {
-    backgroundColor:'green',
-    flex:1,
-    position:'relative'
-  },
   tooltipContent: {
-    borderRadius: 20,
-    paddingVertical:25,
-    paddingLeft:15,
-    paddingRight:25,
-    gap:15,
+    borderRadius: 8,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+    gap: 15,
   },
   optionText: {
     color: '#fff',
     fontSize: 16,
   },
-})
+});
+
+export default ToolTip;
