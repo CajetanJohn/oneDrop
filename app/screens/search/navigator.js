@@ -7,39 +7,51 @@ import OnlineSearchScreen from './OnlineSearch';
 import LocalSearchScreen from './LocalSearchScreen';
 import SearchCustomHeader from '../../components/SearchCustomHeader';
 import selectionControl from '../../lib/control/SelectionControl';
+import { useTheme } from '../../lib/utils/SetTheme';
+import { SEARCH_ONLINE, SEARCH_LOCALLY } from '@env';
 
 const Tab = createMaterialTopTabNavigator();
 
 const SearchNavigation = observer(() => {
+  const { currentTheme } = useTheme();
   return (
     <>
       <SearchCustomHeader />
 
       <Tab.Navigator
         screenOptions={{
-          tabBarActiveTintColor: 'yellow', // Color of the active tab title
+          tabBarActiveTintColor: currentTheme.textColor,
           tabBarStyle: {
-            backgroundColor: 'orange', // Background color of the tab bar
-            borderBottomWidth: 0, // No border at the bottom
-            elevation: 0, // No shadow/elevation for Android
+            backgroundColor: 'transparent',
+            borderBottomWidth: 0,
+            elevation: 0,
           },
           tabBarLabelStyle: {
-            fontWeight: 'bold', // Optional: make the label bold
-          },
-          tabBarIndicatorStyle: {
-            backgroundColor: 'red', // Background color of the active tab
-            borderRadius: 10, // Rounded corners for the active tab
-            height: '100%', // Make the indicator take the full height of the tab
+            fontWeight: 'bold',
           },
           tabBarItemStyle: {
-            borderRadius: 10, // Border radius for each tab item
+            borderRadius: 10,
           },
-          tabBarPressColor: 'transparent', // Disable the press hue change
+          tabBarPressColor: 'transparent',
+          tabBarIndicatorStyle: {
+            backgroundColor: currentTheme.textColor,
+            height: 4,
+            borderRadius: 2,
+          },
         }}
         onTabPress={({ route }) => selectionControl.setSearchSource(route.name)}
       >
-        <Tab.Screen name="Local" component={LocalSearchScreen} />
-        <Tab.Screen name="Online" component={OnlineSearchScreen} />
+        {/* Custom tab titles */}
+        <Tab.Screen
+          name={SEARCH_LOCALLY}
+          component={LocalSearchScreen}
+          options={{ tabBarLabel: 'Search Locally' }} // Custom title for "Local" tab
+        />
+        <Tab.Screen
+          name={SEARCH_ONLINE}
+          component={OnlineSearchScreen}
+          options={{ tabBarLabel: 'Search Online' }} // Custom title for "Online" tab
+        />
       </Tab.Navigator>
     </>
   );

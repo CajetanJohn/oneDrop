@@ -13,18 +13,20 @@ import Loading from './app/screens/Loading';
 import AuthStack from './app/screens/auth/navigation';
 import SplashScreen from './app/screens/Loading';
 import SearchNavigation from './app/screens/search/navigator';
+import { useTheme } from './app/lib/utils/SetTheme';
 
 import { View, StyleSheet } from 'react-native';
 
 
 const AppContent = () => {
   const insets = useSafeAreaInsets(); // Get the safe area insets
+  const {currentTheme} = useTheme()
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container, { paddingTop: insets.top, backgroundColor:currentTheme.background  }]}>
       <StatusBar
         backgroundColor="transparent"
-        barStyle="dark-content"
+        barStyle={currentTheme.StatusBar}
         translucent={true}
       />
       <SearchNavigation/>
@@ -62,7 +64,6 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'red'
   },
 });
 

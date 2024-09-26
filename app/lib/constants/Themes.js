@@ -25,6 +25,8 @@ const themes = {
     specialIconColor:'red',
     backgroundImage: null,
 
+    highlightedTextColor:'orange',
+
     tinyFont:12,
     smallFont:15,
     mediumFont:20,
@@ -64,6 +66,9 @@ const themes = {
     borderColor:"#3A3A3C",
     shadowColor:"",
     errorColor:"red",
+
+    highlightedTextColor:'orange',
+
 
     dividerColor:'grey',
     drawerBackgroundColor: '#000000',
