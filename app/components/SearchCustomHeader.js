@@ -6,6 +6,7 @@ import LeftArrowIcon from '../assets/icons/LeftArrowIcon';
 import CloseIcon from '../assets/icons/CloseIcon';
 import AnimatedPressable from './AnimatedPressable';
 import { useTheme } from '../lib/utils/SetTheme';
+import modalStore from '../lib/control/modalControl';
 
 const SearchCustomHeader = observer(() => {
   const { currentTheme } = useTheme();
@@ -13,7 +14,7 @@ const SearchCustomHeader = observer(() => {
   return (
     <View style={styles.header}>
       {/* Back Button */}
-      <AnimatedPressable onPress={() => console.log('Back Pressed')}>
+      <AnimatedPressable onPress={() => { modalStore.closeCurrentModal()}}>
         <LeftArrowIcon size={24} color={currentTheme.iconColor}/>
       </AnimatedPressable>
 

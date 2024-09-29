@@ -134,7 +134,7 @@ export const CloseSelectionModeIcon = () => {
 
   return (
     <TouchableOpacity onPress={closeSelectionMode}>
-      <CloseIcon color={currentTheme.iconColor} size={30} />
+      <CloseIcon color={currentTheme.iconColor} size={15} />
     </TouchableOpacity>
   );
 };

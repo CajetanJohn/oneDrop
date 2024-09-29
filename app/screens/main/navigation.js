@@ -167,7 +167,7 @@ const MainNavigation = observer(() => {
   };
 
   return (
-    <SafeAreaView style={[styles.screen, { backgroundColor: currentTheme.background }]}>
+    <View style={[styles.screen, { backgroundColor: currentTheme.background }]}>
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
@@ -179,7 +179,7 @@ const MainNavigation = observer(() => {
       <AppModal>
         <Text>Your custom modal content here</Text>
       </AppModal>
-    </SafeAreaView>
+    </View>
   );
 });
 

@@ -14,4 +14,5 @@
     CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO:"choosing which playlist to add selected audios",
     ADDING_AUDIOS_TO_PLAYLIST:"adding audio files to a specific playlist",
     VIEWING_PLAYLIST_DETAILS:"viewing a specific playlist",
+    SEARCHING:"searching for a song"
   };

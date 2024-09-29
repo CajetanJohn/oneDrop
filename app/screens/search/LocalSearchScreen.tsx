@@ -1,4 +1,3 @@
-// LocalSearchScreen.js
 import React from 'react';
 import { View, FlatList, Text, StyleSheet } from 'react-native';
 import { observer } from 'mobx-react-lite';
@@ -13,6 +12,8 @@ const LocalSearchScreen = observer(() => {
   const handleItemPress = (item) => {
     console.log('Item clicked:', item);
   };
+  console.log(selectionControl.filteredResults);
+  
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.background }]}>

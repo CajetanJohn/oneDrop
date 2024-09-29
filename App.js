@@ -29,12 +29,13 @@ const AppContent = () => {
         barStyle={currentTheme.StatusBar}
         translucent={true}
       />
-      <SearchNavigation/>
+      <MainNavigation />
       
       {/* Uncomment the following when needed */}
       {/* <SplashScreen/>
       <AuthStack/>
-      <MainNavigation />
+      <SearchNavigation/>
+      
       <Splash/>
       <Loading/> */}
     </View>

@@ -8,14 +8,7 @@ const OnlineSearchScreen = observer(() => {
   const {currentTheme} = useTheme()
 
   return (
-    <View style={[styles.container, {backgroundColor:currentTheme.background}]}>
-      <FlatList
-        data={selectionControl.filteredResults}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
-        ListEmptyComponent={<Text style={styles.empty}>No online results found</Text>}
-      />
-    </View>
+   <></>
   );
 });
 

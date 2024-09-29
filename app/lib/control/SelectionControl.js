@@ -40,9 +40,10 @@ class SelectionControl {
     active:false,
     searchingFrom:'',
     searchText:'',
+
     sourceData:{
-      localData:['Local Song 1', 'Local Song 2', 'Local Song 3'],
-      onlineData:['Online Song 1', 'Online Song 2', 'Online Song 3'],
+      localData:[],
+      onlineData:['Online Song 1', 'On8line Song 2', 'Online Song 3'],
     }
   }
 
@@ -72,6 +73,14 @@ class SelectionControl {
         }
       }
     );
+
+    reaction(
+      () => this.search.active,
+      () => {
+        const playlist = playlistStore.playlists.get('111');
+        this.search.sourceData.localData = playlist.tracks || []
+      }
+    );
   }
 
   setHeaderHeight = (height) => {
@@ -84,15 +93,30 @@ class SelectionControl {
 
   turnOffSelection = async () => {
     const activeType = this.selection.selectionActivity;
+  
+    // Check if activeType exists; if not, return early
     if (!activeType) return;
+  
+    // Safely access selectionData and ensure it exists
     const selectionData = this.getSelectionData;
+    if (!selectionData) return; // Ensure selectionData is defined
+  
+    // Check if the selection is active
     if (this.selection.active) {
-      this.selection.active = false;
-      this.selection.selectionActivity = '';
-      selectionData.itemsSelected = [];
-      selectionData.srcItems = [];
+      this.selection.active = false; // Turn off selection
+      this.selection.selectionActivity = ''; // Reset selection activity
+  
+      // Check if itemsSelected and srcItems exist before modifying
+      if (Array.isArray(selectionData.itemsSelected)) {
+        selectionData.itemsSelected = []; // Clear selected items
+      }
+  
+      if (Array.isArray(selectionData.srcItems)) {
+        selectionData.srcItems = []; // Clear source items
+      }
     }
   };
+  
 
   setActivity = (status) => {
     const { selectionActivity, srcId = '111' } = status;
@@ -189,6 +213,7 @@ class SelectionControl {
 
 
   setSearchText = (text) => {
+    this.search.active = true
     this.search.searchText = text;
   };
 
@@ -201,15 +226,40 @@ class SelectionControl {
   }
 
   get filteredResults() {
-    const dataToFilter =  this.search.searchingFrom === 'Local' ? this.search.sourceData.localData : this.search.sourceData.onlineData;
-    if(this.getSearchText.trim() === '') return null
-    return dataToFilter.filter((item) =>
-      item.toLowerCase().includes(this.getSearchText.toLowerCase())
-    );
-  }
-
-
+    if(!this.search.active) return
+    // Step 1: Determine the source data based on `searchingFrom` key
+    const dataToFilter = this.search.searchingFrom === 'Local'
+      ? playlistStore.playlists.get('111').tracks
+      : playlistStore.playlists.get('111').tracks;
+    
+    // Step 2: If the search text is empty, return `null` to indicate no results
+    const searchText = this.getSearchText.trim();
+    if (searchText === '') return null;
   
+    // Step 3: Normalize the search text
+    const normalizedSearchText = this.normalizeString(searchText);
+  
+    // Step 4: Filter the data based on matching any of the fields: `filename`, `artist`, `album`, or `uri`
+    return dataToFilter.filter((item) => {
+      // Normalize each field and check for matches, ensuring each property exists
+      return (
+        (item.filename && this.normalizeString(item.filename).includes(normalizedSearchText)) ||
+        (item.artist && this.normalizeString(item.artist).includes(normalizedSearchText)) ||
+        (item.album && this.normalizeString(item.album).includes(normalizedSearchText)) ||
+        (item.uri && this.normalizeString(item.uri).includes(normalizedSearchText))
+      );
+    });
+  }
+  
+  // Helper function to normalize strings by removing unwanted characters
+  normalizeString(string) {
+    // Convert to lowercase and remove unwanted characters
+    return string
+      .toLowerCase()
+      .replace(/[_\-\+\s]/g, ''); // Adjust the regex to include any additional characters you want to ignore
+  }
+  
+
 }
 
 const selectionControl = new SelectionControl();

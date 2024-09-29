@@ -39,7 +39,9 @@ export const SearchButton = () => {
     const { currentTheme } = useTheme();
   
     const handleSearchPress = () => {
-      console.log("Search pressed");
+      modalStore.openModal({
+        modalType: MODAL_TYPE.SEARCHING,
+      })
     };
   
     return (

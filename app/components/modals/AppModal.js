@@ -9,6 +9,7 @@ import { useTheme } from '../../lib/utils/SetTheme';
 import { MODAL_TYPE } from '../../lib/constants/Variables';
 import modalStore from '../../lib/control/modalControl';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import SearchNavigation from '../../screens/search/navigator';
 
 const AppModal = observer(() => {
   const status = modalStore.getModalData;
@@ -18,11 +19,7 @@ const AppModal = observer(() => {
   // Get the safe area insets for top, bottom, left, right
   const insets = useSafeAreaInsets();
 
-  useEffect(() => {
-    console.log('modalStack:', modalStore.modal.modalStack);
-    console.log('current modalType:', modalStore.modal.modalType);
-  }, [modalStore.modal.modalType]);
-
+  
   const child = () => {
     switch (status.modalType) {
       case MODAL_TYPE.CREATING_A_NEW_PLAYLIST:
@@ -33,6 +30,8 @@ const AppModal = observer(() => {
         return <SelectAudios onClose={handleClose} />;
       case MODAL_TYPE.CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO:
         return <SelectPlaylist onClose={handleClose} />;
+      case MODAL_TYPE.SEARCHING:
+        return <SearchNavigation onClose={handleClose} />;
       default:
         return null;
     }
@@ -72,7 +71,7 @@ const AppModal = observer(() => {
       {/* Add padding using insets */}
       <View style={{ 
         flex: 1, 
-        backgroundColor: 'red',
+        backgroundColor: currentTheme.background,
         paddingTop: insets.top,
         paddingBottom: insets.bottom,
         paddingLeft: insets.left,
