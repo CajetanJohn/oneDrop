@@ -48,7 +48,8 @@ class ModalStore {
 
 
 
-  async openModal({ modalType, playlistId }) {
+  async openModal({ modalType, playlistId, items }) {
+    
     runInAction(() => {
 
       if (modalType) {
@@ -68,6 +69,7 @@ class ModalStore {
 
 
       case MODAL_TYPE.CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO:
+        this.modal[ MODAL_TYPE.CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO].itemsToInsert = items
         break;
 
       case MODAL_TYPE.ADDING_AUDIOS_TO_PLAYLIST:
@@ -110,7 +112,7 @@ class ModalStore {
       // Check if `modal` and `modalType` exist before trying to access their properties
       if (this.modal && this.modal.modalType) {
         // Ensure `playlistId` is defined before modifying it
-        if (this.modal[this.modal.modalType].playlistId) {
+        if (this.modal[this.modal.modalType]) {
           this.modal[this.modal.modalType].playlistId = ''; // Clear playlist ID
         }
 
@@ -123,6 +125,7 @@ class ModalStore {
         // Ensure modal state is accessible
         this.modal.isOpen = false; // Close modal
         this.modal.modalType = ''; // Reset modal type
+        
         
         this.calculateAndSetPlaylistName(); // Call to update playlist name
         selectionControl.turnOffSelection(); // Turn off selection control

@@ -9,7 +9,8 @@ import selectionControl from '../../lib/control/SelectionControl';
 import MusicNoteIcon from '../../assets/icons/MusicNoteIcon';
 import { PopulatePLaylist } from '../SelectionOptions';
 import AddToFavoritesButton from '../interaction/AddToFavoritesButton';
-
+import LeftArrowIcon from '../../assets/icons/LeftArrowIcon';
+import HeartIcon from '../../assets/icons/HeartIcon';
 
 
 const headerHeight = 90;
@@ -89,7 +90,7 @@ const PlaylistDetails = observer(({ playlistId, onClose }) => {
 
                     <View style={styles.headerTextLeft}>
                         <TouchableOpacity onPress={onClose}>
-                            <MaterialIcons name="chevron-left" size={40} color={currentTheme.iconColor} />
+                            <LeftArrowIcon size={20} color={currentTheme.iconColor} />
                         </TouchableOpacity>
                         <View style={{ flexDirection: "column" }}>
                             <Animated.Text style={{ color: currentTheme.textColor, fontSize: currentTheme.mediumFont, opacity: headerTextOpacity }}>

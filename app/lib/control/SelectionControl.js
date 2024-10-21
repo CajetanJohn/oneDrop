@@ -56,6 +56,7 @@ class SelectionControl {
       getActivityStatus: computed,
       areAllItemsSelected: computed,
       filteredResults: computed,
+      closeSearch:action,
     });
 
     reaction(
@@ -216,6 +217,11 @@ class SelectionControl {
     this.search.active = true
     this.search.searchText = text;
   };
+
+  closeSearch = async () =>{
+    this.search.active = false
+    
+  }
 
   setSearchSource = (tab) => {
     this.search.searchingFrom = tab;

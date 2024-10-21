@@ -7,7 +7,9 @@ import { useTheme } from '../lib/utils/SetTheme';
 import AnimatedPressable from './AnimatedPressable';
 import CustomPopover from './PopOver';
 import Menu from '../assets/icons/menu';
-
+import modalStore from '../lib/control/modalControl';
+import playlistStore from '../lib/store/playlistStore';
+import { MODAL_TYPE } from '../lib/constants/Variables';
 // HighlightedText Component
 const HighlightedText = observer(({ text, highlight, style }) => {
   if (!highlight) {
@@ -44,10 +46,19 @@ const EdgeIcon = observer(({ item, onPress }) => {
   const ItemMenuRef = React.useRef(null);
 
   const options = [
-    { title: 'Add', onPress: () => { console.log(item); } },
-    { title: 'Delete', onPress: () => { console.log(item); } },
-    { title: 'Share', onPress: () => { console.log(item); } },
-    { title: 'Details', onPress: () => { console.log(item); } }
+    { title: 'Add', onPress: () => {
+      console.log('item', item.id);
+      
+      togglePopover()
+      modalStore.openModal({
+        modalType: MODAL_TYPE.CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO,
+        items:[item.id]
+      })
+     } },
+    { title: 'Delete', onPress: () => {
+      togglePopover();
+      playlistStore.deleteTrackFromPlaylist('111', [item.id])      
+    } },
   ];
 
   const togglePopover = () => {

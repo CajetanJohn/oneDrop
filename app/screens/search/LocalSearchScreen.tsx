@@ -12,14 +12,12 @@ const LocalSearchScreen = observer(() => {
   const handleItemPress = (item) => {
     console.log('Item clicked:', item);
   };
-  console.log(selectionControl.filteredResults);
-  
 
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <FlatList
         data={selectionControl.filteredResults}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id.toString()} // Assuming each item has a unique 'id'
         renderItem={({ item }) => (
           <SearchItem
             item={item}

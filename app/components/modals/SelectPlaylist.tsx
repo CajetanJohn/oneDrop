@@ -1,10 +1,15 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import { observer } from 'mobx-react-lite';
 import playlistStore from '../../lib/store/playlistStore'; // Assuming this is where the store is located
 import { FontAwesome } from '@expo/vector-icons'; // Icons from FontAwesome
 import { useTheme } from '../../lib/utils/SetTheme';
 import selectionControl from '../../lib/control/SelectionControl';
+import modalStore from '../../lib/control/modalControl';
+import { MODAL_TYPE } from '../../lib/constants/Variables';
+import LeftArrowIcon from '../../assets/icons/LeftArrowIcon';
+import HeartIcon from '../../assets/icons/HeartIcon';
+import AnimatedPressable from '../AnimatedPressable';
 
 const SelectPlaylist = observer(({ onClose }) => {
   const { currentTheme } = useTheme(); // Get current theme
@@ -19,9 +24,6 @@ const SelectPlaylist = observer(({ onClose }) => {
       setPlaylists(combinedPlaylists);
     };
 
-    console.log(playlists);
-    
-
     fetchPlaylists();
 
     // Clean up the observer
@@ -34,25 +36,34 @@ const SelectPlaylist = observer(({ onClose }) => {
     const icon = isFavourite ? 'heart' : 'music-note'; // Icons for favourite and custom playlists
 
     const onPress = ()=>{
-        playlistStore.addTrackToPlaylist(item.id, selectionControl.getSelectionData?.itemsSelected)
-
+        playlistStore.addTrackToPlaylist(item.id, selectionControl.getSelectionData?.itemsSelected || modalStore.modal[MODAL_TYPE.CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO].itemsToInsert)
+        onClose();
     }
     return (
-      <TouchableOpacity style={styles.playlistItem} onPress={onPress}>
-        <FontAwesome 
-          name={isFavourite ? 'heart' : 'music-note'} 
+      <Pressable style={styles.playlistItem} onPress={onPress}>
+
+        <View style={[styles.iconContainer, { backgroundColor: currentTheme.tertiaryBackground }]}>
+        {
+          isFavourite ? 
+          <HeartIcon
           size={24} 
           color={currentTheme.iconColor} 
         />
+        :
+        <></>
+
+        }
+        </View>
+
+
+        
+        
         <View style={styles.textContainer}>
           <Text style={[styles.playlistName, { color: currentTheme.textColor }]}>
             {item.playlistName}
           </Text>
-          <Text style={[styles.playlistId, { color: currentTheme.textColor }]}>
-            ID: {item.id}
-          </Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
@@ -60,12 +71,13 @@ const SelectPlaylist = observer(({ onClose }) => {
     <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       {/* Header */}
       <View style={styles.header}>
-        <FontAwesome 
-          name="arrow-left" 
-          size={24} 
-          color={currentTheme.iconColor} 
-          onPress={onClose} 
-        />
+        <AnimatedPressable onPress={onClose}>
+          <LeftArrowIcon
+            size={19} 
+            color={currentTheme.iconColor} 
+          />
+        </AnimatedPressable>
+        
         <Text style={[styles.headerText, { color: currentTheme.textColor }]}>
           Select Playlist
         </Text>
@@ -91,6 +103,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 16,
   },
+  iconContainer: {
+    padding: 15,
+    borderRadius: 15,
+  },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -100,8 +116,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
   },
   textContainer: {
     marginLeft: 10,

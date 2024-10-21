@@ -5,11 +5,13 @@ import MusicNoteIcon from '../assets/icons/MusicNoteIcon';
 import Menu from '../assets/icons/menu';
 import selectionControl from '../lib/control/SelectionControl';
 import { observer } from 'mobx-react-lite';
-import { ACTIVITY_TYPE } from '../lib/constants/Variables';
+import { ACTIVITY_TYPE, MODAL_TYPE } from '../lib/constants/Variables';
 
 import { RadioButton } from './inputs/RadioButton';
 import CustomPopover from './PopOver';
 import AnimatedPressable from './AnimatedPressable';
+import modalStore from '../lib/control/modalControl';
+import playlistStore from '../lib/store/playlistStore';
 
 
 const EdgeIcon = observer(({ audio, playlistId, selectionMode, isSelected, onPress }) => {
@@ -18,8 +20,17 @@ const EdgeIcon = observer(({ audio, playlistId, selectionMode, isSelected, onPre
   const audioItemMenuRef = useRef(null);
 
   const options = [
-    { title: 'Add', onPress: () => { console.log(audio, playlistId); } },
-    { title: 'Delete', onPress: () => { console.log(audio, playlistId); } },
+    { title: 'Add', onPress: () => {
+      togglePopover()
+      modalStore.openModal({
+        modalType: MODAL_TYPE.CHOOSING_SPECIFIC_PLAYLIST_TO_ADD_SELECTED_AUDIOS_TO,
+        items:[audio.id]
+      })
+     } },
+    { title: 'Delete', onPress: () => {
+      togglePopover();
+      playlistStore.deleteTrackFromPlaylist(playlistId, [audio.id])      
+    } },
     { title: 'Share', onPress: () => { console.log(audio, playlistId); } },
     { title: 'Details', onPress: () => { console.log(audio, playlistId); } }
   ];

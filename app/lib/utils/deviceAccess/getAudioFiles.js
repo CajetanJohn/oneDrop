@@ -15,19 +15,6 @@ export const getAudioFiles = async () => {
             mediaType: 'audio',
             first: 1000, // Fetches up to 1000 files (adjust if necessary)
         });
-        useEffect(() => {
-            let count = 0
-          console.log('rerendered', count++);
-          
-        
-          return () => {
-            second
-          }
-        }, [third])
-        
-
-        console.log(); // Log the fetched audio files
-
         // Extract and map track data
         const tracks = audioFiles.assets.map(asset => ({
             id: asset.id,
@@ -38,7 +25,11 @@ export const getAudioFiles = async () => {
             artist: asset.artist || 'Unknown Artist',
             creationTime: asset.creationTime, // Timestamp when the file was created
             mediaType: asset.mediaType,
+            modificationTime: asset.modificationTime, 
         }));
+
+        console.log(tracks);
+        
 
         // Playlist details
         const playlistName = "Device Tracks";
